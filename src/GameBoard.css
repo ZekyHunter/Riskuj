@@ -1,0 +1,49 @@
+@import url("https://fonts.googleapis.com/css2?family=Sintony:wght@400;700&display=swap");
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(6, 10rem); /* Šest sloupců */
+  grid-auto-rows: 7rem; /* Výška políček */
+  gap: 15px; /* Mezery mezi políčky */
+  justify-content: center;
+  padding: 20px;
+}
+
+.category-cell {
+  background-color: #ffd200; /* Odstín kategorie */
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  font-size: x-large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 5px solid #ffffff;
+  border-radius: 15px;
+}
+
+.question-cell {
+  background-color: #c64100; /* Odstín pro otázky */
+  color: white;
+  font-size: x-large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 5px solid #ffffff;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.question-cell:hover {
+  background-color: #f28e3b; /* Hover efekt */
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.category-cell,
+.question-cell {
+  font-family: "Roboto", sans-serif;
+}
