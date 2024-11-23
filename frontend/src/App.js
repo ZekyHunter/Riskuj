@@ -1,38 +1,53 @@
-import React, { useState } from "react";
-import GameBoard from "./GameBoard";
-import Modal from "./Modal";
-import { questionsData } from "./questionsData";
+import axios from "axios";
+import React, { useState, Component } from "react";
+import UserBoard from "./UserBoard";
+//import GameBoard from "./GameBoard";
+//import Modal from "./Modal";
 
-const App = () => {
-  const categories = ["Historie", "Věda", "Kultura", "Sport", "Příroda"];
-  const questions = Array(5).fill([100, 200, 300, 400, 500]); // Pět sloupců, každý má 5 otázek
-  const [isModalOpen, setIsModalOpen] = useState(false); // Stav pro modální okno
-  const [selectedQuestion, setSelectedQuestion] = useState(null); // Vybraná otázka
+export default class App extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      users: [],
+      isModalOpen: false,
+      setIsModalOpen: false,
+      selectedQuestion: null,
+      setSelectedQuestion: null,
 
-  const openModal = (question) => {
-    setSelectedQuestion(question); // Nastaví vybranou otázku
-    setIsModalOpen(true); // Otevře modální okno
+    }
+  }
+
+  openModal(question){
+    this.setSelectedQuestion = question; // Nastaví vybranou otázku
+    this.setIsModalOpen = true; // Otevře modální okno
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false); // Zavře modální okno
+  closeModal(){
+    this.setIsModalOpen = false; // Zavře modální okno
   };
 
-  return (
-    <div>
-      <h1 className="riskuj">Riskuj!</h1>
-      <GameBoard
-        categories={categories}
-        questions={questionsData}
-        onQuestionClick={openModal} // Předání funkce pro otevření modálu
-      />
-      <Modal
-        isOpen={isModalOpen}
-        question={selectedQuestion}
-        onClose={closeModal}
-      />
-    </div>
-  );
+
+  getUsers(){
+    axios
+      .get("/api/users/")
+      .then(res => {this.setState({users: res.data})})
+      .catch((err) => console.log(err));
+  }
+
+  render() {
+    return (
+      <div>
+        <h1 className="riskuj">Riskuj!</h1>
+        <div id="users">
+          <button onClick={() => this.getUsers()}>Get users</button>
+          {this.state.users.map(user => (
+            <UserBoard key={user.id} userName={user.name} userPoints={user.points}/>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
 };
 
-export default App;
+
