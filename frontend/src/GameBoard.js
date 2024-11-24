@@ -1,26 +1,28 @@
 import React from "react";
 import "./GameBoard.css";
 
-const GameBoard = ({ categories, questions, onQuestionClick }) => {
-  return (
-    <div className="game-board">
-      {categories.map((category, catIndex) => (
-        <React.Fragment key={catIndex}>
-          <div className="category-cell">{category}</div>
-          {questions[catIndex].map((question, qIndex) => (
-            <div
-              className="question-cell"
-              key={qIndex}
-              onClick={() => onQuestionClick(question)} // Předání otázky do modálního okna
-            >
-              {qIndex * 100 + 100}{" "}
-              {/* Zobrazení čísla otázky (100, 200, 300, ...) */}
-            </div>
-          ))}
-        </React.Fragment>
-      ))}
+
+export default function GameBoard({categories, questions, modalIsOpen, changeModalState}) {
+
+  const categoryList = categories.map((category, mapIndex) =>
+    <div key={mapIndex}>
+      <div className="category-cell">{category}</div>
+      {questions[mapIndex].map((question, questionIndex) =>
+        <div
+          className="question-cell"
+          key={questionIndex}
+          onClick={() => changeModalState(question)}
+        > {question}:
+          {questionIndex * 100 + 100}{" "}
+        </div>
+      )}
     </div>
   );
-};
 
-export default GameBoard;
+  return (
+    <div className="game-board">
+      {categoryList}
+    </div>
+  );
+
+};

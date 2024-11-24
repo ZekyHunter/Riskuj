@@ -6,3 +6,11 @@ class Question(models.Model):
 
     def _str_(self):
         return self.text
+
+
+class User(models.Model):
+    name = models.CharField(max_length=256)
+    points = models.IntegerField()
+
+    def _str_(self):
+        return self.name

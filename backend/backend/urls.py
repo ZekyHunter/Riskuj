@@ -6,6 +6,7 @@ from riskuj import views
 
 router = routers.DefaultRouter()
 router.register(r'questions', views.QuestionView, 'question')
+router.register(r'users', views.UserView, 'user')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
