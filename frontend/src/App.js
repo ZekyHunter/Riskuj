@@ -2,8 +2,7 @@ import axios from "axios";
 import React, { useState, Component } from "react";
 import UserBoard from "./UserBoard";
 import GameBoard from "./GameBoard";
-//import Modal from "./Modal";
-
+import Modal from "./Modal";
 
 
 export default class App extends Component {
@@ -12,9 +11,7 @@ export default class App extends Component {
     this.state = {
       users: [],
       isModalOpen: false,
-      setIsModalOpen: false,
       selectedQuestion: null,
-      setSelectedQuestion: null,
       categories: ["Historie", "Věda", "Kultura", "Sport", "Příroda"],
       questions: [
         ["Otázka 1", "Otázka 2", "Otázka 3", "Otázka 4", "Otázka 5"],
@@ -26,15 +23,12 @@ export default class App extends Component {
     }
   }
 
-  openModal(question){
-    this.setSelectedQuestion = question; // Nastaví vybranou otázku
-    this.setIsModalOpen = true; // Otevře modální okno
+  changeModalState(question){
+    this.setState({
+      selectedQuestion: question,
+      isModalOpen: this.state.isModalOpen ? false : true
+    });
   };
-
-  closeModal(){
-    this.setIsModalOpen = false; // Zavře modální okno
-  };
-
 
   getUsers(){
     axios
@@ -47,10 +41,15 @@ export default class App extends Component {
     return (
       <div>
         <h1 className="riskuj">Riskuj!</h1>
+
         <div id="users">
           <button onClick={() => this.getUsers()}>Get users</button>
           {this.state.users.map(user => (
-            <UserBoard key={user.id} userName={user.name} userPoints={user.points}/>
+            <UserBoard
+              key={user.id}
+              userName={user.name}
+              userPoints={user.points}
+            />
           ))}
         </div>
 
@@ -59,11 +58,20 @@ export default class App extends Component {
         <GameBoard
           categories={this.state.categories}
           questions={this.state.questions}
+          modalIsOpen={this.state.isModalOpen}
+          changeModalState={this.changeModalState.bind(this)}
         />
 
-        </div>
+        <Modal
+          isOpen={this.state.isModalOpen}
+          question={this.state.selectedQuestion}
+          changeModalState={this.changeModalState.bind(this)}
+        />
+
+      </div>
     );
   };
+
 
 };
 
