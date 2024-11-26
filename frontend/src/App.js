@@ -4,6 +4,7 @@ import React, { useState, Component } from "react";
 import UserBoard from "./UserBoard";
 import GameBoard from "./GameBoard";
 import Modal from "./Modal";
+import PlayerPage from "./PlayerPage";
 
 export default class App extends Component {
   constructor(props){
@@ -19,6 +20,7 @@ export default class App extends Component {
         ["Otázka 11", "Otázka 12", "Otázka 13", "Otázka 14", "Otázka 15"],
         ["Otázka 16", "Otázka 17", "Otázka 18", "Otázka 19", "Otázka 20"],
         ["Otázka 21", "Otázka 22", "Otázka 23", "Otázka 24", "Otázka 25"],
+        ["Otázka 26", "Otázka 27", "Otázka 28", "Otázka 29", "Otázka 30"]
       ],
     }
   }
@@ -70,9 +72,7 @@ export default class App extends Component {
 
         <Router>
           <Routes>
-            {/* Definice různých stránek */}
-            <Route path="/" element={<GameBoardPage />} /> {/* Hlavní stránka */}
-            <Route path="/player" element={<PlayerPage />} /> {/* Stránka hráče */}
+            <Route path="/player" element={<PlayerPage />} />
           </Routes>
         </Router>
 
