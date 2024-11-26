@@ -1,23 +1,20 @@
 import React from "react";
 import "./GameBoard.css";
 
-export default function GameBoard({
-  categories,
-  questions,
-  modalIsOpen,
-  changeModalState,
-}) {
-  const categoryList = categories.map((category, mapIndex) => (
-    <div className="oneCategoryRow" key={mapIndex}>
-      <div className="category-cell">{category}</div>
+
+export default function GameBoard({categories, questions, modalIsOpen, changeModalState}) {
+
+  if (!categories) return null;
+
+  const categoryList = categories.map((category, mapIndex) =>
+    <div key={mapIndex}>
+      <div className="oneCategoryRow">{category}</div>
       {questions[mapIndex].map((question, questionIndex) => (
         <div
           className="question-cell"
           key={questionIndex}
           onClick={() => changeModalState(question)}
-        >
-          {" "}
-          {question}:{questionIndex * 100 + 100}{" "}
+        > {questionIndex * 100 + 100}{" "}
         </div>
       ))}
     </div>

@@ -1,10 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
 import React, { useState, Component } from "react";
-import UserBoard from "./UserBoard";
-import GameBoard from "./GameBoard";
-import Modal from "./Modal";
-import PlayerPage from "./PlayerPage";
+import MainPage from "./MainPage";
 
 export default class App extends Component {
   constructor(props) {
@@ -13,23 +10,9 @@ export default class App extends Component {
       users: [],
       isModalOpen: false,
       selectedQuestion: null,
-      categories: [
-        "Historie",
-        "Věda",
-        "Kultura",
-        "Sport",
-        "Příroda",
-        "Cokoliv",
-      ],
-      questions: [
-        ["Otázka 1", "Otázka 2", "Otázka 3", "Otázka 4", "Otázka 5"],
-        ["Otázka 6", "Otázka 7", "Otázka 8", "Otázka 9", "Otázka 10"],
-        ["Otázka 11", "Otázka 12", "Otázka 13", "Otázka 14", "Otázka 15"],
-        ["Otázka 16", "Otázka 17", "Otázka 18", "Otázka 19", "Otázka 20"],
-        ["Otázka 21", "Otázka 22", "Otázka 23", "Otázka 24", "Otázka 25"],
-        ["Otázka 26", "Otázka 27", "Otázka 28", "Otázka 29", "Otázka 30"],
-      ],
-    };
+      categories: null,
+      questions: null,
+    }
   }
 
   changeModalState(question) {
@@ -39,59 +22,39 @@ export default class App extends Component {
     });
   }
 
-  getUsers() {
-    axios
-      .get("/api/users/")
-      .then((res) => {
-        this.setState({ users: res.data });
-      })
-      .catch((err) => console.log(err));
+  setUsers(data){
+    this.setState({users: data});
+  }
+
+  setQuestions(data){
+    let categories = []
+    let questions_list = []
+    for (let [category, questions] of Object.entries(data)) {
+        categories.push(category);
+        questions_list.push(questions)
+    }
+    this.setState({categories: categories});
+    this.setState({questions: questions_list});
   }
 
   render() {
     return (
       <div>
-        <h1 className="riskuj">Riskuj!</h1>
-        <div>
-          <h2>Jmeno</h2>
-          <p>72</p>
-        </div>
-
-        <div>
-          <h2>Jmeno</h2>
-          <p>72</p>
-        </div>
-
-        <div>
-          <h2>Jmeno</h2>
-          <p>72</p>
-        </div>
-
-        <div id="users">
-          <button onClick={() => this.getUsers()}>Get users</button>
-          {this.state.users.map((user) => (
-            <UserBoard
-              key={user.id}
-              userName={user.name}
-              userPoints={user.points}
-            />
-          ))}
-        </div>
-
-        <br />
-
-        <GameBoard
-          categories={this.state.categories}
-          questions={this.state.questions}
-          modalIsOpen={this.state.isModalOpen}
-          changeModalState={this.changeModalState.bind(this)}
-        />
-
-        <Modal
-          isOpen={this.state.isModalOpen}
-          question={this.state.selectedQuestion}
-          changeModalState={this.changeModalState.bind(this)}
-        />
+        <Router>
+          <Routes>
+            <Route path="/" element={ <MainPage
+              setUsers={this.setUsers.bind(this)}
+              users={this.state.users}
+              setQuestions={this.setQuestions.bind(this)}
+              categories={this.state.categories}
+              questions={this.state.questions}
+              isModalOpen={this.state.isModalOpen}
+              changeModalState={this.changeModalState.bind(this)}
+              selectedQuestion={this.state.selectedQuestion}
+              /> } />
+            <Route path="/player" element={<PlayerPage />} />
+          </Routes>
+        </Router>
       </div>
     );
   }

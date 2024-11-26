@@ -26,4 +26,4 @@ yarn-error.log*
 /venv
 .idea
 migrations
-db.sqlite3
+backend/db.sqlite3
