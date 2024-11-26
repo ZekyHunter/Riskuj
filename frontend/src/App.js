@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import GameBoard from "./GameBoard";
 import Modal from "./Modal";
 import { questionsData } from "./questionsData";
 
 const App = () => {
-  const categories = ["Historie", "Věda", "Kultura", "Sport", "Příroda"];
-  const questions = Array(5).fill([100, 200, 300, 400, 500]); // Pět sloupců, každý má 5 otázek
+  const categories = ["Historie", "Věda", "Kultura", "Sport", "Příroda", "Cokoliv"];
+  const questions = Array(6).fill([100, 200, 300, 400, 500]); // Pět sloupců, každý má 5 otázek
   const [isModalOpen, setIsModalOpen] = useState(false); // Stav pro modální okno
   const [selectedQuestion, setSelectedQuestion] = useState(null); // Vybraná otázka
 
@@ -31,6 +32,13 @@ const App = () => {
         question={selectedQuestion}
         onClose={closeModal}
       />
+      <Router>
+        <Routes>
+          {/* Definice různých stránek */}
+          <Route path="/" element={<GameBoardPage />} /> {/* Hlavní stránka */}
+          <Route path="/player" element={<PlayerPage />} /> {/* Stránka hráče */}
+        </Routes>
+      </Router>
     </div>
   );
 };
