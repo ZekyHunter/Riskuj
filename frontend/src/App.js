@@ -7,35 +7,44 @@ import Modal from "./Modal";
 import PlayerPage from "./PlayerPage";
 
 export default class App extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       users: [],
       isModalOpen: false,
       selectedQuestion: null,
-      categories: ["Historie", "Věda", "Kultura", "Sport", "Příroda", "Cokoliv"],
+      categories: [
+        "Historie",
+        "Věda",
+        "Kultura",
+        "Sport",
+        "Příroda",
+        "Cokoliv",
+      ],
       questions: [
         ["Otázka 1", "Otázka 2", "Otázka 3", "Otázka 4", "Otázka 5"],
         ["Otázka 6", "Otázka 7", "Otázka 8", "Otázka 9", "Otázka 10"],
         ["Otázka 11", "Otázka 12", "Otázka 13", "Otázka 14", "Otázka 15"],
         ["Otázka 16", "Otázka 17", "Otázka 18", "Otázka 19", "Otázka 20"],
         ["Otázka 21", "Otázka 22", "Otázka 23", "Otázka 24", "Otázka 25"],
-        ["Otázka 26", "Otázka 27", "Otázka 28", "Otázka 29", "Otázka 30"]
+        ["Otázka 26", "Otázka 27", "Otázka 28", "Otázka 29", "Otázka 30"],
       ],
-    }
+    };
   }
 
-  changeModalState(question){
+  changeModalState(question) {
     this.setState({
       selectedQuestion: question,
-      isModalOpen: this.state.isModalOpen ? false : true
+      isModalOpen: this.state.isModalOpen ? false : true,
     });
-  };
+  }
 
-  getUsers(){
+  getUsers() {
     axios
       .get("/api/users/")
-      .then(res => {this.setState({users: res.data})})
+      .then((res) => {
+        this.setState({ users: res.data });
+      })
       .catch((err) => console.log(err));
   }
 
@@ -43,10 +52,24 @@ export default class App extends Component {
     return (
       <div>
         <h1 className="riskuj">Riskuj!</h1>
+        <div>
+          <h2>Jmeno</h2>
+          <p>72</p>
+        </div>
+
+        <div>
+          <h2>Jmeno</h2>
+          <p>72</p>
+        </div>
+
+        <div>
+          <h2>Jmeno</h2>
+          <p>72</p>
+        </div>
 
         <div id="users">
           <button onClick={() => this.getUsers()}>Get users</button>
-          {this.state.users.map(user => (
+          {this.state.users.map((user) => (
             <UserBoard
               key={user.id}
               userName={user.name}
@@ -55,7 +78,7 @@ export default class App extends Component {
           ))}
         </div>
 
-        <br/>
+        <br />
 
         <GameBoard
           categories={this.state.categories}
@@ -69,20 +92,7 @@ export default class App extends Component {
           question={this.state.selectedQuestion}
           changeModalState={this.changeModalState.bind(this)}
         />
-
-        <Router>
-          <Routes>
-            <Route path="/player" element={<PlayerPage />} />
-          </Routes>
-        </Router>
-
       </div>
     );
-  };
-
-};
-
-
-
-
-
+  }
+}
