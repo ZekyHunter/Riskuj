@@ -5,7 +5,8 @@ import Modal from "./Modal";
 import UserBoard from "./UserBoard";
 
 
-export default function MainPage({ setUsers, users, setQuestions, categories, questions, isModalOpen, changeModalState, selectedQuestion }) {
+export default function MainPage({
+  setUsers, users, setQuestions, categories, questions, isModalOpen, changeModalState, selectedQuestion }) {
 
   function getUsers () {
     axios
@@ -18,7 +19,7 @@ export default function MainPage({ setUsers, users, setQuestions, categories, qu
     axios
       .get("/api/questions/")
       .then(res => { setQuestions(res.data) })
-      .catch((err) => console.log(err));
+      .catch((err) => alert("Pravděpodobně vám chybí otázky v databázi."));
   }
 
   return (

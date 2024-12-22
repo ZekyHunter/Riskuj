@@ -1,9 +1,11 @@
 const UserBoard = ({ userName, userPoints }) => {
 
-    return <div>
+    return (
+      <div>
         <p>{userName}</p>
         <p>{userPoints}</p>
-    </div>;
+      </div>
+    );
 }
 
 export default UserBoard;

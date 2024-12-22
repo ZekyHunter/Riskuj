@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from django.http import HttpResponse, HttpResponseBadRequest
 import json
-from .serializers import QuestionSerializer, UserSerializer
+from .serializers import UserSerializer
 from .models import Question, User, Category
 
 

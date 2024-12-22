@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
 import React, { useState, Component } from "react";
 import MainPage from "./MainPage";
+import PlayerPage from "./PlayerPage";
 
 export default class App extends Component {
   constructor(props) {
