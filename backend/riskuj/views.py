@@ -2,13 +2,33 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from django.http import HttpResponse, HttpResponseBadRequest
 import json
-from .serializers import UserSerializer
-from .models import Question, User, Category
+
+from rest_framework.response import Response
+
+from .serializers import PlayerSerializer, ActivePlayerSerializer
+from .models import Question, Player, Category, ActivePlayer
 
 
-class UserView(viewsets.ModelViewSet):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+class PlayerView(viewsets.ModelViewSet):
+    serializer_class = PlayerSerializer
+    queryset = Player.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = PlayerSerializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(**serializer.validated_data)
+        return Response(serializer.validated_data)
+
+
+class ActivePlayerView(viewsets.ModelViewSet):
+
+    serializer_class = ActivePlayerSerializer
+    queryset = ActivePlayer.objects.all().order_by("timestamp")
+
+    def destroy(self, request, *args, **kwargs):
+        ActivePlayer.objects.all().delete()
+        return Response(data='delete success')
 
 
 @api_view(['GET'])
@@ -24,8 +44,21 @@ def get_questions(request):
             data[category.name] = questions
 
     except Exception as e:
-        print(e)
         return HttpResponseBadRequest
 
     return HttpResponse(content=json.dumps(data), content_type='application/json')
+
+
+@api_view(['POST'])
+def button_press(request):
+    name = request.data.get('username', None)
+    timestamp = request.data.get('timestamp', None)
+    if not ActivePlayer.objects.all().exists():
+        ActivePlayer.objects.create(user=name, timestamp=timestamp)
+    else:
+        for active_player in ActivePlayer.objects.all():
+            if active_player.timestamp > timestamp:
+                active_player.delete()
+                ActivePlayer.objects.create(user=name, timestamp=timestamp)
+    return HttpResponse()
 

@@ -1,7 +1,11 @@
 from django.db import models
+import uuid
 
 
 class Category(models.Model):
+    class Meta:
+        verbose_name_plural = "categories"
+
     name = models.CharField(max_length=256)
 
     def __str__(self):
@@ -25,15 +29,24 @@ class Question(models.Model):
         return self.text
 
 
-class User(models.Model):
+class Player(models.Model):
     name = models.CharField(max_length=256)
+    unique_username = models.CharField(max_length=256, unique=True, default=uuid.uuid4())
     points = models.IntegerField(null=True, blank=True)
+    answered = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
         if not self.points:
-            print("no points")
             self.points = 0
         super().save(*args, **kwargs)
+
+
+class ActivePlayer(models.Model):
+    user = models.CharField(max_length=256)
+    timestamp = models.IntegerField()
+
+    def __str__(self):
+        return self.user

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Question, User
+from .models import Question, Player, ActivePlayer
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -8,7 +8,13 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ('id', 'text', )
 
 
-class UserSerializer(serializers.ModelSerializer):
+class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('id', 'name', 'points', )
+        model = Player
+        fields = ('id', 'name', 'unique_username', 'points', 'answered', )
+
+
+class ActivePlayerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActivePlayer
+        fields = ('id', 'user', 'timestamp', )

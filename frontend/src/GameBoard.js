@@ -14,7 +14,7 @@ categories, questions, modalIsOpen, changeModalState, answeredQuestions, openedB
         return (<div className="gold-cell" key={questionIndex}>Zlatá cihla!</div>)
       } else {
         return (
-          <div className="question-cell" key={questionIndex} onClick={() => revealGold(q)}>
+          <div className="question-cell" key={questionIndex} onClick={() => revealGold(q, questionIndex)}>
             {questionIndex * 100 + 100}
           </div>
         )
@@ -23,7 +23,7 @@ categories, questions, modalIsOpen, changeModalState, answeredQuestions, openedB
       return (<div className="question-cell" key={questionIndex}></div>)
     } else {
       return (
-        <div className="question-cell" key={questionIndex} onClick={() => changeModalState(q)}>
+        <div className="question-cell" key={questionIndex} onClick={() => changeModalState(q, questionIndex)}>
           {questionIndex * 100 + 100}
         </div>
       )

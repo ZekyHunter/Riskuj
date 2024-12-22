@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import GameBoard from "./GameBoard";
 import Modal from "./Modal";
@@ -7,7 +7,26 @@ import UserBoard from "./UserBoard";
 
 export default function MainPage({
   setUsers, users, setQuestions, categories, questions, isModalOpen, changeModalState, selectedQuestion,
-  answeredQuestions, markQuestionAsAnswered, openedBricks, revealGold }) {
+  answeredQuestions, markQuestionAsAnswered, openedBricks, revealGold, activePlayer, selectedQuestionPoints,
+  setActivePlayer }) {
+
+
+  useEffect(() => {
+    // Start interval on mount
+    const intervalId = setInterval(() => {
+      axios
+        .get("/api/active-players/")
+        .then(res => { setActivePlayer(res) })
+        .catch((err) => {
+          console.error("Error fetching active players:", err);
+        });
+    }, 5000); // Interval runs every 5000ms (5 seconds)
+
+    // Cleanup interval on component unmount
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []); // Empty dependency array means this runs only on mount and unmount
 
   function getUsers () {
     axios
@@ -30,8 +49,8 @@ export default function MainPage({
         {users.map(user => (
           <UserBoard
             key={user.id}
-            userName={user.name}
-            userPoints={user.points}
+            user={user}
+            activePlayer={activePlayer}
           />
         ))}
       </div>
@@ -39,21 +58,24 @@ export default function MainPage({
       <button onClick={() => getQuestions()}>Get questions</button>
 
       <GameBoard
-          categories={categories}
-          questions={questions}
-          modalIsOpen={isModalOpen}
-          changeModalState={changeModalState}
-          answeredQuestions={answeredQuestions}
-          openedBricks={openedBricks}
-          revealGold={revealGold}
-        />
+        categories={categories}
+        questions={questions}
+        modalIsOpen={isModalOpen}
+        changeModalState={changeModalState}
+        answeredQuestions={answeredQuestions}
+        openedBricks={openedBricks}
+        revealGold={revealGold}
+      />
 
-        <Modal
-          isOpen={isModalOpen}
-          question={selectedQuestion}
-          changeModalState={changeModalState}
-          markQuestionAsAnswered={markQuestionAsAnswered}
-        />
+      <Modal
+        isOpen={isModalOpen}
+        question={selectedQuestion}
+        changeModalState={changeModalState}
+        markQuestionAsAnswered={markQuestionAsAnswered}
+        activePlayer={activePlayer}
+        selectedQuestionPoints={selectedQuestionPoints}
+        setActivePlayer={setActivePlayer}
+      />
     </div>
   );
 
