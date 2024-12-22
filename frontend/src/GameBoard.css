@@ -42,6 +42,22 @@
   cursor: pointer;
 }
 
+.gold-cell {
+  background-color: #FFD700; /* Zlata cihlicka */
+  color: black;
+  font-size: x-large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 0.5rem solid #FFD700;
+  border-radius: 1rem;
+  padding: 2.2rem 0.5rem;
+  margin: 0.5rem;
+  width: 10rem;
+  cursor: pointer;
+}
+
 .question-cell:hover {
   background-color: #f28e3b; /* Hover efekt */
 }

@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import axios from "axios";
 import React, { useState, Component } from "react";
 import MainPage from "./MainPage";
 import PlayerPage from "./PlayerPage";
@@ -13,6 +12,8 @@ export default class App extends Component {
       selectedQuestion: null,
       categories: null,
       questions: null,
+      answeredQuestions: [],
+      openedBricks: [],
     }
   }
 
@@ -20,6 +21,12 @@ export default class App extends Component {
     this.setState({
       selectedQuestion: question,
       isModalOpen: this.state.isModalOpen ? false : true,
+    });
+  }
+
+  markQuestionAsAnswered(question) {
+    this.setState({
+      answeredQuestions: [...this.state.answeredQuestions, question]
     });
   }
 
@@ -35,7 +42,18 @@ export default class App extends Component {
         questions_list.push(questions)
     }
     this.setState({categories: categories});
+
+    // add gold bricks into randomly generated spots
+    for (let i=0; i<3; i++) {
+      questions_list[Math.floor(Math.random() * 6)][Math.floor(Math.random() * 5)] = `GOLD ${i+1}`;
+    }
+
+    // set questions
     this.setState({questions: questions_list});
+  }
+
+  revealGold(question){
+    this.setState({openedBricks: [...this.state.openedBricks, question]});
   }
 
   render() {
@@ -52,6 +70,10 @@ export default class App extends Component {
               isModalOpen={this.state.isModalOpen}
               changeModalState={this.changeModalState.bind(this)}
               selectedQuestion={this.state.selectedQuestion}
+              answeredQuestions={this.state.answeredQuestions}
+              markQuestionAsAnswered={this.markQuestionAsAnswered.bind(this)}
+              openedBricks={this.state.openedBricks}
+              revealGold={this.revealGold.bind(this)}
               /> } />
             <Route path="/player" element={<PlayerPage />} />
           </Routes>

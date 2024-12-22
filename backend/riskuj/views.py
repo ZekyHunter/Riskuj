@@ -15,7 +15,7 @@ class UserView(viewsets.ModelViewSet):
 def get_questions(request):
     data = {}
     try:
-        categories = Category.objects.order_by('?')[:5]
+        categories = Category.objects.order_by('?')[:6]
 
         for category in categories:
             questions = [Question.objects.filter(

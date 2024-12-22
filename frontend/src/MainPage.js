@@ -6,7 +6,8 @@ import UserBoard from "./UserBoard";
 
 
 export default function MainPage({
-  setUsers, users, setQuestions, categories, questions, isModalOpen, changeModalState, selectedQuestion }) {
+  setUsers, users, setQuestions, categories, questions, isModalOpen, changeModalState, selectedQuestion,
+  answeredQuestions, markQuestionAsAnswered, openedBricks, revealGold }) {
 
   function getUsers () {
     axios
@@ -42,12 +43,16 @@ export default function MainPage({
           questions={questions}
           modalIsOpen={isModalOpen}
           changeModalState={changeModalState}
+          answeredQuestions={answeredQuestions}
+          openedBricks={openedBricks}
+          revealGold={revealGold}
         />
 
         <Modal
           isOpen={isModalOpen}
           question={selectedQuestion}
           changeModalState={changeModalState}
+          markQuestionAsAnswered={markQuestionAsAnswered}
         />
     </div>
   );

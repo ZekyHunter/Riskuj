@@ -2,9 +2,35 @@ import React from "react";
 import "./GameBoard.css";
 
 
-export default function GameBoard({categories, questions, modalIsOpen, changeModalState}) {
+export default function GameBoard({
+categories, questions, modalIsOpen, changeModalState, answeredQuestions, openedBricks, revealGold}) {
 
   if (!categories) return null;
+
+  function viewQuestion(q, questionIndex) {
+
+    if (q.includes("GOLD")) {
+      if (openedBricks.includes(q)) {
+        return (<div className="gold-cell" key={questionIndex}>Zlatá cihla!</div>)
+      } else {
+        return (
+          <div className="question-cell" key={questionIndex} onClick={() => revealGold(q)}>
+            {questionIndex * 100 + 100}
+          </div>
+        )
+      }
+    } else if (answeredQuestions.includes(q)) {
+      return (<div className="question-cell" key={questionIndex}></div>)
+    } else {
+      return (
+        <div className="question-cell" key={questionIndex} onClick={() => changeModalState(q)}>
+          {questionIndex * 100 + 100}
+        </div>
+      )
+    }
+
+  }
+
 
   const categoryList = categories.map((category, mapIndex) =>
     <div key={mapIndex}>
@@ -13,13 +39,7 @@ export default function GameBoard({categories, questions, modalIsOpen, changeMod
         {category}
 
         {questions[mapIndex].map((question, questionIndex) => (
-          <div
-            className="question-cell"
-            key={questionIndex}
-            onClick={() => changeModalState(question)}
-          >
-            {questionIndex * 100 + 100}{" "}
-          </div>
+          viewQuestion(question, questionIndex)
         ))}
 
       </div>
