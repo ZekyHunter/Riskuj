@@ -19,15 +19,19 @@
 }
 
 button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #c64100;
+  background-color: #005fae;
   color: white;
+  font-family: "Archivo Black", sans-serif;
+  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
-  background-color: #9c3300;
+  background-color: #1e7ed6;
 }

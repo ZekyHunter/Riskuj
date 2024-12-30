@@ -5,6 +5,7 @@ import UserBoard from "./UserBoard";
 import GameBoard from "./GameBoard";
 import Modal from "./Modal";
 import PlayerPage from "./PlayerPage";
+import "./App.css";
 
 export default class App extends Component {
   constructor(props) {
@@ -14,12 +15,12 @@ export default class App extends Component {
       isModalOpen: false,
       selectedQuestion: null,
       categories: [
-        "Historie",
-        "Věda",
-        "Kultura",
-        "Sport",
-        "Příroda",
-        "Cokoliv",
+        "HISTORIE",
+        "VĚDA",
+        "KULTURA",
+        "SPORT",
+        "PŘÍRODA",
+        "COKOLIV",
       ],
       questions: [
         ["Otázka 1", "Otázka 2", "Otázka 3", "Otázka 4", "Otázka 5"],
@@ -51,20 +52,33 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <h1 className="riskuj">Riskuj!</h1>
-        <div>
-          <h2>Jmeno</h2>
-          <p>72</p>
-        </div>
+        <div id="userBoard">
+          <div className="userContainer">
+            <div className="user">
+              <h2>Karel</h2>
+            </div>
+            <div className="points">
+              <span>420</span>
+            </div>
+          </div>
 
-        <div>
-          <h2>Jmeno</h2>
-          <p>72</p>
-        </div>
+          <div className="userContainer">
+            <div className="user-selected">
+              <h2>JARMIL</h2>
+            </div>
+            <div className="points">
+              <span>760</span>
+            </div>
+          </div>
 
-        <div>
-          <h2>Jmeno</h2>
-          <p>72</p>
+          <div className="userContainer">
+            <div className="user">
+              <h2>Mourek</h2>
+            </div>
+            <div className="points">
+              <span>696</span>
+            </div>
+          </div>
         </div>
 
         <div id="users">
