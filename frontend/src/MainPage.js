@@ -73,6 +73,7 @@ export default function MainPage() {
 
       <GameBoard
         activePlayer={activePlayer}
+        setActivePlayer={setActivePlayer}
         changeModalState={changeModalState}
         answeredQuestions={answeredQuestions}
       />

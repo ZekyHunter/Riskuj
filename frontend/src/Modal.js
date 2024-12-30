@@ -11,7 +11,17 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
   function answer (response) {
 
     const playerDivs = document.getElementsByClassName("player");
+
     for (let element of playerDivs) {
+
+      if (response === "correct") {
+        markQuestionAsAnswered(question);
+        changeModalState(question, selectedQuestionPoints);
+      } else {
+        axios.patch(`/api/users/${activePlayer}/`, {answered: true}).catch((err) => console.log(err));
+        setActivePlayer(null);
+      }
+
       const p = element.querySelector('p.username');
 
       if (p.parentElement.id === String(activePlayer)) {
@@ -28,16 +38,7 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
         break;
       }
 
-      if (response === "correct") {
-        markQuestionAsAnswered(question);
-        changeModalState(question, selectedQuestionPoints);
-      } else {
-        axios.patch(`/api/users/${activePlayer}/`, {answered: true}).catch((err) => console.log(err));
-        // deselect active player
-        setActivePlayer(null);
-        //TODO: find out player id
-        // TODO: update player in db { answered: true }
-      }
+
 
     }
 

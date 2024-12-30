@@ -3,7 +3,7 @@ import "./GameBoard.css";
 import axios from "axios";
 
 
-export default function GameBoard({ activePlayer, changeModalState, answeredQuestions }) {
+export default function GameBoard({ activePlayer, setActivePlayer, changeModalState, answeredQuestions }) {
 
   const [categories, setCategories] = useState([]);
   const [questions, setQuestions] = useState([]);
@@ -21,6 +21,8 @@ export default function GameBoard({ activePlayer, changeModalState, answeredQues
         let playerPoints = parseInt(pointsElement.textContent, 10);
         playerPoints = playerPoints + (questionIndex * 100 + 100);
         pointsElement.textContent = playerPoints;
+        axios.delete("/api/active-players/1").catch((err) => console.log(err));
+        setActivePlayer(null);
         break;
       }
     }
