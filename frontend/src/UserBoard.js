@@ -13,7 +13,7 @@ export default function UserBoard ({ user, activePlayer }) {
       } else {
         setPlayerClass("normal player");
       }
-    }, [activePlayer, user.unique_username]); // Dependencies: this effect runs when activePlayer or user.unique_username changes
+    }, [activePlayer, user.id]); // Dependencies: this effect runs when activePlayer or user.id changes
 
     return (
       <div className={ playerClass } id={user.id}>

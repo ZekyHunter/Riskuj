@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 import json
 
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 from .serializers import PlayerSerializer, ActivePlayerSerializer
 from .models import Question, Player, Category, ActivePlayer
@@ -13,12 +14,12 @@ class PlayerView(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
     queryset = Player.objects.all()
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = PlayerSerializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(**serializer.validated_data)
-        return Response(serializer.validated_data)
+    # def update(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     serializer = PlayerSerializer(instance, data=request.data, partial=True)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save(**serializer.validated_data)
+    #     return Response(serializer.validated_data)
 
 
 class ActivePlayerView(viewsets.ModelViewSet):
@@ -51,14 +52,15 @@ def get_questions(request):
 
 @api_view(['POST'])
 def button_press(request):
-    name = request.data.get('username', None)
+    user_id = request.data.get('user', None)
+    user = get_object_or_404(Player, id=user_id)
     timestamp = request.data.get('timestamp', None)
     if not ActivePlayer.objects.all().exists():
-        ActivePlayer.objects.create(user=name, timestamp=timestamp)
+        ActivePlayer.objects.create(user=user, timestamp=timestamp)
     else:
         for active_player in ActivePlayer.objects.all():
             if active_player.timestamp > timestamp:
                 active_player.delete()
-                ActivePlayer.objects.create(user=name, timestamp=timestamp)
+                ActivePlayer.objects.create(user=user, timestamp=timestamp)
     return HttpResponse()
 

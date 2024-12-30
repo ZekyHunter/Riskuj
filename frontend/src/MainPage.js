@@ -5,47 +5,63 @@ import Modal from "./Modal";
 import UserBoard from "./UserBoard";
 
 
-export default function MainPage({
-  setUsers, users, setQuestions, categories, questions, isModalOpen, changeModalState, selectedQuestion,
-  answeredQuestions, markQuestionAsAnswered, openedBricks, revealGold, activePlayer, selectedQuestionPoints,
-  setActivePlayer }) {
+export default function MainPage() {
 
+  const [users, setUsers] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [selectedQuestionPoints, setSelectedQuestionPoints] = useState(null);
+  const [answeredQuestions, setAnsweredQuestions] = useState([]);
+  const [activePlayer, setActivePlayer] = useState(null);  // ActivePlayer.user.id
 
   useEffect(() => {
     // Start interval on mount
-    const intervalId = setInterval(() => {
+    const getUsers = setInterval(() => {
+      axios
+        .get("/api/users/")
+        .then(res => { setUsers(res.data) })
+        .catch((err) => console.log(err));
+    }, 5000); // Interval runs every 5000ms (5 seconds)
+
+    const getActivePlayers = setInterval(() => {
       axios
         .get("/api/active-players/")
-        .then(res => { setActivePlayer(res) })
+        .then(res => {
+           if (res && res.data.length > 0) {
+             setActivePlayer(res.data[0]["user"]);
+           } else {
+             setActivePlayer(null);
+           }
+         })
         .catch((err) => {
           console.error("Error fetching active players:", err);
         });
-    }, 5000); // Interval runs every 5000ms (5 seconds)
+    }, 5000);
 
     // Cleanup interval on component unmount
     return () => {
-      clearInterval(intervalId);
+      clearInterval(getUsers);
+      clearInterval(getActivePlayers);
     };
   }, []); // Empty dependency array means this runs only on mount and unmount
 
-  function getUsers () {
-    axios
-      .get("/api/users/")
-      .then(res => { setUsers(res.data) })
-      .catch((err) => console.log(err));
+  function markQuestionAsAnswered(question) {
+    setAnsweredQuestions([...answeredQuestions, question]);
+    setSelectedQuestion(null);
+    setSelectedQuestionPoints(null);
+    setActivePlayer(null);
   }
 
-  function getQuestions () {
-    axios
-      .get("/api/questions/")
-      .then(res => { setQuestions(res.data) })
-      .catch((err) => alert("Pravděpodobně vám chybí otázky v databázi."));
+  function changeModalState(question, questionIndex) {
+    setModalOpen(modalOpen ? false : true);
+    setSelectedQuestion(question);
+    setSelectedQuestionPoints(questionIndex * 100 + 100);
   }
 
   return (
     <div>
       <div id="users">
-        <button onClick={() => getUsers()}>Get users</button>
+        <h1>Players: </h1>
         {users.map(user => (
           <UserBoard
             key={user.id}
@@ -55,20 +71,14 @@ export default function MainPage({
         ))}
       </div>
 
-      <button onClick={() => getQuestions()}>Get questions</button>
-
       <GameBoard
-        categories={categories}
-        questions={questions}
-        modalIsOpen={isModalOpen}
+        activePlayer={activePlayer}
         changeModalState={changeModalState}
         answeredQuestions={answeredQuestions}
-        openedBricks={openedBricks}
-        revealGold={revealGold}
       />
 
       <Modal
-        isOpen={isModalOpen}
+        modalOpen={modalOpen}
         question={selectedQuestion}
         changeModalState={changeModalState}
         markQuestionAsAnswered={markQuestionAsAnswered}

@@ -3,23 +3,18 @@ import axios from "axios";
 import "./Modal.css";
 
 
-export default function Modal({ isOpen, question, changeModalState, markQuestionAsAnswered, activePlayer,
+export default function Modal({ modalOpen, question, changeModalState, markQuestionAsAnswered, activePlayer,
   selectedQuestionPoints, setActivePlayer }) {
 
-  if (!isOpen) return null;
+  if (!modalOpen) return null;
 
   function answer (response) {
-
-    console.log("you pushed a button")
-    console.log(activePlayer);
 
     const playerDivs = document.getElementsByClassName("player");
     for (let element of playerDivs) {
       const p = element.querySelector('p.username');
 
-      console.log(p)
-
-      if (p.parentElement.id == activePlayer) {
+      if (p.parentElement.id === String(activePlayer)) {
         const pointsElement = element.querySelector("p.points")
         let playerPoints = parseInt(pointsElement.textContent, 10);
 
@@ -34,7 +29,7 @@ export default function Modal({ isOpen, question, changeModalState, markQuestion
       }
 
       if (response === "correct") {
-        markQuestionAsAnswered(question, response);
+        markQuestionAsAnswered(question);
         changeModalState(question, selectedQuestionPoints);
       } else {
         axios.patch(`/api/users/${activePlayer}/`, {answered: true}).catch((err) => console.log(err));
