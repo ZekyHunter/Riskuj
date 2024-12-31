@@ -14,6 +14,15 @@ class PlayerView(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
     queryset = Player.objects.all()
 
+    def retrieve(self, request, pk=None):
+        queryset = Player.objects.all()
+        if pk.isdigit():
+            user = get_object_or_404(queryset, pk=pk)
+        else:
+            user = get_object_or_404(queryset, unique_username=pk)
+        serializer = PlayerSerializer(user)
+        return Response(serializer.data)
+
     def update(self, request, *args, **kwargs):
         if request.data.get("answered") is False:
             for player in Player.objects.all():

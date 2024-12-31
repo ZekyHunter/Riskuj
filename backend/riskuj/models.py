@@ -31,8 +31,8 @@ class Question(models.Model):
 
 class Player(models.Model):
     name = models.CharField(max_length=256)
-    unique_username = models.CharField(max_length=256, unique=True, default=uuid.uuid4())
-    points = models.IntegerField(null=True, blank=True)
+    unique_username = models.CharField(max_length=256, unique=True, default=uuid.uuid4(), null=True, blank=True)
+    points = models.IntegerField(null=True, blank=True, default=0)
     answered = models.BooleanField(default=False)
 
     def __str__(self):
@@ -41,6 +41,8 @@ class Player(models.Model):
     def save(self, *args, **kwargs):
         if not self.points:
             self.points = 0
+        if not self.unique_username:
+            self.unique_username = uuid.uuid4()
         super().save(*args, **kwargs)
 
 
