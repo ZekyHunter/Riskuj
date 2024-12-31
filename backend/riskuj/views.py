@@ -14,12 +14,18 @@ class PlayerView(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
     queryset = Player.objects.all()
 
-    # def update(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     serializer = PlayerSerializer(instance, data=request.data, partial=True)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save(**serializer.validated_data)
-    #     return Response(serializer.validated_data)
+    def update(self, request, *args, **kwargs):
+        if request.data.get("answered") is False:
+            for player in Player.objects.all():
+                player.answered = False
+                player.save()
+        else:
+            instance = self.get_object()
+            serializer = PlayerSerializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(**serializer.validated_data)
+
+        return Response(data='update success')
 
 
 class ActivePlayerView(viewsets.ModelViewSet):

@@ -14,6 +14,7 @@ export default function PlayerPage() {
       { player ? (
         <PlayerGameBoard
           player={player}
+          setPlayer={setPlayer}
         />
       ) : (
         <AddPlayer

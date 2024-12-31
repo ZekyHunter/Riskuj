@@ -17,9 +17,9 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
       if (response === "correct") {
         markQuestionAsAnswered(question);
         changeModalState(question, selectedQuestionPoints);
+        axios.patch(`/api/users/${activePlayer}/`, {answered: false}).catch((err) => console.log(err));
       } else {
         axios.patch(`/api/users/${activePlayer}/`, {answered: true}).catch((err) => console.log(err));
-        setActivePlayer(null);
       }
 
       const p = element.querySelector('p.username');
@@ -31,19 +31,24 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
         if (response === "correct") {
           playerPoints = playerPoints + selectedQuestionPoints;
           pointsElement.textContent = playerPoints;
+          axios.patch(`/api/users/${activePlayer}/`, {points: playerPoints}).catch((err) => console.log(err));
         } else if (response === "wrong") {
           playerPoints = playerPoints - selectedQuestionPoints;
           pointsElement.textContent = playerPoints;
+          axios.patch(`/api/users/${activePlayer}/`, {points: playerPoints}).catch((err) => console.log(err));
         }
         break;
       }
 
-
-
     }
 
     axios.delete("/api/active-players/1").catch((err) => console.log(err));
-    // TODO: send update to backend api with player points to save to db in case of page crash
+
+  }
+
+  function close () {
+    changeModalState(question, selectedQuestionPoints);
+    axios.patch(`/api/users/${activePlayer}/`, {answered: false}).catch((err) => console.log(err));
   }
 
   return (
@@ -52,7 +57,7 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
         <h2 style={{color:"black"}}>{question}</h2>
         <button onClick={() => answer("correct")}>Správná odpověď</button>
         <button onClick={() => answer("wrong")}>Špatná odpověď</button>
-        <button onClick={() => changeModalState(question)}>Zavřít</button>
+        <button onClick={() => close()}>Zavřít</button>
       </div>
     </div>
   );
