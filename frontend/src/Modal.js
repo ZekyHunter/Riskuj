@@ -12,10 +12,6 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
 
     axios.delete("/api/active-players/1").catch((err) => console.log(err));
 
-    const playerDivs = document.getElementsByClassName("player");
-
-    for (let element of playerDivs) {
-
       if (response === "correct") {
         markQuestionAsAnswered(question);
         changeModalState(question, selectedQuestionPoints);
@@ -24,24 +20,19 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
         axios.patch(`/api/users/${activePlayer}/`, {answered: true}).catch((err) => console.log(err));
       }
 
-      const p = element.querySelector('p.username');
-
-      if (p.parentElement.id === String(activePlayer)) {
-        const pointsElement = element.querySelector("p.points")
+      const playerDiv = document.querySelector(`#player-${activePlayer}`);
+      if (playerDiv) {
+        const pointsElement = playerDiv.querySelector("p.points");
         let playerPoints = parseInt(pointsElement.textContent, 10);
-
         if (response === "correct") {
-          playerPoints = playerPoints + selectedQuestionPoints;
-          pointsElement.textContent = playerPoints;
-          axios.patch(`/api/users/${activePlayer}/`, {points: playerPoints}).catch((err) => console.log(err));
+          playerPoints += selectedQuestionPoints;
         } else if (response === "wrong") {
-          playerPoints = playerPoints - selectedQuestionPoints;
-          pointsElement.textContent = playerPoints;
-          axios.patch(`/api/users/${activePlayer}/`, {points: playerPoints}).catch((err) => console.log(err));
+          playerPoints -= selectedQuestionPoints;
         }
-        break;
+        pointsElement.textContent = playerPoints;
+        axios.patch(`/api/users/${activePlayer}/`, {points: playerPoints}).catch((err) => console.log(err));
       }
-    }
+
   }
 
   // when the question is closed, close the modal and update users as not having answered

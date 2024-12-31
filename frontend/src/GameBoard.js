@@ -9,90 +9,90 @@ export default function GameBoard({ activePlayer, setActivePlayer, changeModalSt
   const [questions, setQuestions] = useState([]);
   const [openedBricks, setOpenedBricks] = useState([]);
 
-  function revealGold(question, questionIndex){
-    setOpenedBricks([...openedBricks, question]);
-
-    const playerDivs = document.getElementsByClassName("player");
-    for (let element of playerDivs) {
-      const usernameElement = element.querySelector('p.username');
-
-      if (usernameElement.parentElement.id === String(activePlayer)) {
-        const pointsElement = element.querySelector("p.points")
-        let playerPoints = parseInt(pointsElement.textContent, 10);
-        playerPoints = playerPoints + (questionIndex * 100 + 100);
-        pointsElement.textContent = playerPoints;
-        axios.delete("/api/active-players/1").catch((err) => console.log(err));
-        setActivePlayer(null);
-        break;
-      }
+  // Helper function to update player points
+  const updatePlayerPoints = (questionIndex) => {
+    const playerDiv = document.querySelector(`#player-${activePlayer}`);
+    if (playerDiv) {
+      const pointsElement = playerDiv.querySelector("p.points");
+      let playerPoints = parseInt(pointsElement.textContent, 10);
+      playerPoints += (questionIndex * 100 + 100);
+      pointsElement.textContent = playerPoints;
     }
+  };
+
+  function revealGold(question, questionIndex){
+    setOpenedBricks((prevOpenedBricks) => [...prevOpenedBricks, question]);  // prevOpenedBricks is the state before the update
+
+    // Update points for the active player
+    updatePlayerPoints(questionIndex);
+
+    axios.delete("/api/active-players/1").catch((err) => console.log(err));
+    setActivePlayer(null);
+
   }
 
-  function createGameBoard(data){
+  function initializeGameBoard(data){
     let categories = []
-    let questions_list = []
+    let questionsList = []
     for (let [category, questions] of Object.entries(data)) {
         categories.push(category);
-        questions_list.push(questions)
+        questionsList.push(questions)
     }
     setCategories(categories);
 
-    // add gold bricks into randomly generated spots
-    for (let i=0; i<3; i++) {
-      questions_list[Math.floor(Math.random() * 6)][Math.floor(Math.random() * 5)] = `GOLD ${i+1}`;
+    // Add gold bricks to random spots
+    const randomQuestionsList = [...questionsList];
+    for (let i = 0; i < 3; i++) {
+      const randomCategoryIndex = Math.floor(Math.random() * 6);
+      const randomQuestionIndex = Math.floor(Math.random() * 5);
+      randomQuestionsList[randomCategoryIndex][randomQuestionIndex] = `GOLD ${i + 1}`;
     }
-
-    // set questions
-    setQuestions(questions_list);
+    setQuestions(randomQuestionsList);
   }
 
+  // Fetch data on mount
   useEffect(() => {
     axios
       .get("/api/questions/")
-      .then(res => { createGameBoard(res.data) })
+      .then(res => { initializeGameBoard(res.data) })
       .catch((err) => alert("Pravděpodobně vám chybí otázky v databázi."));
-  }, []); // Empty dependency array means this runs only on mount and unmount
+  }, []);
 
-  function viewQuestion(q, questionIndex) {
-
+  // Render each question cell
+  const renderQuestionCell = (q, questionIndex) => {
     if (q.includes("GOLD")) {
       if (openedBricks.includes(q)) {
-        return (<div className="gold-cell" key={questionIndex}>Zlatá cihla!</div>)
+        return <div className="gold-cell" key={questionIndex}>Zlatá cihla!</div>;
       } else {
         return (
           <div className="question-cell" key={questionIndex} onClick={() => revealGold(q, questionIndex)}>
             {questionIndex * 100 + 100}
           </div>
-        )
+        );
       }
     } else if (answeredQuestions.includes(q)) {
-      return (<div className="question-cell" key={questionIndex}></div>)
+      return <div className="question-cell" key={questionIndex}></div>;
     } else {
       return (
         <div className="question-cell" key={questionIndex} onClick={() => changeModalState(q, questionIndex)}>
           {questionIndex * 100 + 100}
         </div>
-      )
+      );
     }
-
-  }
-
+  };
 
   return (
     <div className="game-board">
-      {
-        categories.map((category, mapIndex) =>
-          <div key={mapIndex}>
-            <div className="oneCategoryRow">
-              {category}
-              {questions[mapIndex].map((question, questionIndex) => (
-                viewQuestion(question, questionIndex)
-              ))}
-            </div>
+      {categories.map((category, mapIndex) => (
+        <div key={mapIndex}>
+          <div className="oneCategoryRow">
+            {category}
+            {questions[mapIndex]?.map((question, questionIndex) =>
+              renderQuestionCell(question, questionIndex)
+            )}
           </div>
-        )
-      }
+        </div>
+      ))}
     </div>
-  )
-
+  );
 }
