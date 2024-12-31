@@ -18,6 +18,8 @@ export default function PlayerGameBoard({ player, setPlayer }) {
 
   useEffect(() => {
 
+    // Start interval on component mount
+    // Continuously check if the button should be enabled or disabled
     const intervalId = setInterval(() => {
       axios
         .get("/api/active-players/")
@@ -27,7 +29,6 @@ export default function PlayerGameBoard({ player, setPlayer }) {
               .get(`/api/users/${player.id}/`)
               .catch((err) => {console.log(err)})
               .then((res) => {
-                setPlayer(res.data);
                 if (!res.data.answered) {
                   setButtonDisabled(false);
                 }})

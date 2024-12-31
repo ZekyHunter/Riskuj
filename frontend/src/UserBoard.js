@@ -6,7 +6,7 @@ export default function UserBoard ({ user, activePlayer }) {
 
     const [playerClass, setPlayerClass] = useState("normal player");
 
-    // Update playerClass when the activePlayer or user changes
+    // Update player div className when activePlayer changes
     useEffect(() => {
       if (user.id == activePlayer) {
         setPlayerClass("active player");
