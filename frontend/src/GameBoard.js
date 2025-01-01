@@ -3,7 +3,7 @@ import "./GameBoard.css";
 import axios from "axios";
 
 
-export default function GameBoard({ setActivePlayer, changeModalState, answeredQuestions }) {
+export default function GameBoard({ activePlayer, setActivePlayer, changeModalState, answeredQuestions }) {
 
   const [categories, setCategories] = useState([]);
   const [questions, setQuestions] = useState([]);
@@ -18,7 +18,7 @@ export default function GameBoard({ setActivePlayer, changeModalState, answeredQ
       points: prevState.points + (questionIndex * 100 + 100),  // only update points
     }));
 
-    axios.delete("/api/active-players/1").catch((err) => console.log(err));
+    axios.delete(`/api/active-players/${activePlayer.user}/`).catch((err) => console.log(err));
   }
 
   function initializeGameBoard(data){
@@ -45,7 +45,7 @@ export default function GameBoard({ setActivePlayer, changeModalState, answeredQ
     axios
       .get("/api/questions/")
       .then(res => { initializeGameBoard(res.data) })
-      .catch((err) => alert("Pravděpodobně vám chybí otázky v databázi."));
+      .catch((err) => console.log(err));
   }, []);
 
   // Render the cell for each question

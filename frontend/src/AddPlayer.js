@@ -23,7 +23,7 @@ export default function AddPlayer({ setPlayer }) {
     e.preventDefault();
 
     axios
-      .get(`/api/users/${uniqueUsername}`)
+      .get(`/api/users/lookup/${uniqueUsername}`)
       .catch((err) => {console.log(err); alert("error")})
       .then((res) => {
         if (res) {

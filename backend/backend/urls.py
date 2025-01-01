@@ -13,4 +13,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/questions/', views.get_questions, name='question'),
     path('api/button-press/', views.button_press, name='button-press'),
+    path('api/users/lookup/<str:unique_username>/', views.PlayerView.as_view({'get': 'retrieve_by_username'})),
+    path('api/users/clear/', views.PlayerView.as_view({'get': 'mark_not_answered'})),
 ]

@@ -10,7 +10,7 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
 
   function answer (response) {
 
-    axios.delete("/api/active-players/1").catch((err) => console.log(err));
+    axios.delete(`/api/active-players/${activePlayer.user}/`).catch((err) => console.log(err));
 
     let answered = false;
     let playerPoints = activePlayer.points;
@@ -20,6 +20,7 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
       changeModalState(question, selectedQuestionPoints);
       playerPoints += selectedQuestionPoints;
     } else if (response === "wrong") {
+      // if the user answers wrongly, other players may still answer
       playerPoints -= selectedQuestionPoints;
       answered = true;
     }
@@ -37,7 +38,7 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
   // when the question is closed, close the modal and update users as not having answered
   function close () {
     changeModalState(question, selectedQuestionPoints);
-    axios.patch("/api/users/1/", {answered: false}).catch((err) => console.log(err));
+    axios.get("/api/users/clear/").catch((err) => console.log(err));
   }
 
   return (

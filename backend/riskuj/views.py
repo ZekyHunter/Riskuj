@@ -14,27 +14,13 @@ class PlayerView(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
     queryset = Player.objects.all()
 
-    def retrieve(self, request, pk=None):
-        queryset = Player.objects.all()
-        if pk.isdigit():
-            user = get_object_or_404(queryset, pk=pk)
-        else:
-            user = get_object_or_404(queryset, unique_username=pk)
-        serializer = PlayerSerializer(user)
+    def retrieve_by_username(self, request, unique_username=None):
+        player = get_object_or_404(Player, unique_username=unique_username)
+        serializer = PlayerSerializer(player)
         return Response(serializer.data)
 
-    def update(self, request, *args, **kwargs):
-        if request.data.get("answered") is False:
-            for player in Player.objects.all():
-                player.answered = False
-                player.save()
-        if kwargs.get("pk", 0) != "1":
-            instance = self.get_object()
-            serializer = PlayerSerializer(instance, data=request.data, partial=True)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(**serializer.validated_data)
-
-        return Response(data='update success')
+    def mark_not_answered(self, request, *args, **kwargs):
+        Player.objects.all().update(answered=False)
 
 
 class ActivePlayerView(viewsets.ModelViewSet):
@@ -42,27 +28,23 @@ class ActivePlayerView(viewsets.ModelViewSet):
     serializer_class = ActivePlayerSerializer
     queryset = ActivePlayer.objects.all().order_by("timestamp")
 
-    def destroy(self, request, *args, **kwargs):
-        ActivePlayer.objects.all().delete()
-        return Response(data='delete success')
-
 
 @api_view(['GET'])
 def get_questions(request):
     data = {}
-    try:
-        categories = Category.objects.order_by('?')[:6]
+    categories = Category.objects.order_by('?')[:6]
 
-        for category in categories:
-            questions = [Question.objects.filter(
-                category=category, points=pt).order_by('?').values_list('text', flat=True)[0] for pt in (
-                '100', '200', '300', '400', '500')]
-            data[category.name] = questions
+    for category in categories:
+        questions = Question.objects.filter(category=category)
+        category_questions = []
 
-    except Exception as e:
-        return HttpResponseBadRequest
+        for pt in ['100', '200', '300', '400', '500']:
+            question = questions.filter(points=pt).first()
+            category_questions.append(question.text)
 
-    return HttpResponse(content=json.dumps(data), content_type='application/json')
+        data[category.name] = category_questions
+
+    return Response(data)
 
 
 @api_view(['POST'])

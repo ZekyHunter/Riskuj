@@ -49,7 +49,6 @@ export default function MainPage() {
     setAnsweredQuestions([...answeredQuestions, question]);
     setSelectedQuestion(null);
     setSelectedQuestionPoints(null);
-
   }
 
   function changeModalState(question, questionIndex) {
@@ -72,6 +71,7 @@ export default function MainPage() {
       </div>
 
       <GameBoard
+        activePlayer={activePlayer}
         setActivePlayer={setActivePlayer}
         changeModalState={changeModalState}
         answeredQuestions={answeredQuestions}
