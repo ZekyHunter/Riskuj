@@ -28,7 +28,7 @@ class PlayerView(viewsets.ModelViewSet):
             for player in Player.objects.all():
                 player.answered = False
                 player.save()
-        else:
+        if kwargs.get("pk", 0) != "1":
             instance = self.get_object()
             serializer = PlayerSerializer(instance, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)

@@ -3,44 +3,34 @@ import "./GameBoard.css";
 import axios from "axios";
 
 
-export default function GameBoard({ activePlayer, setActivePlayer, changeModalState, answeredQuestions }) {
+export default function GameBoard({ setActivePlayer, changeModalState, answeredQuestions }) {
 
   const [categories, setCategories] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [openedBricks, setOpenedBricks] = useState([]);
 
-  // Helper function to update player points
-  const updatePlayerPoints = (questionIndex) => {
-    const playerDiv = document.querySelector(`#player-${activePlayer}`);
-    if (playerDiv) {
-      const pointsElement = playerDiv.querySelector("p.points");
-      let playerPoints = parseInt(pointsElement.textContent, 10);
-      playerPoints += (questionIndex * 100 + 100);
-      pointsElement.textContent = playerPoints;
-    }
-  };
-
   function revealGold(question, questionIndex){
     setOpenedBricks((prevOpenedBricks) => [...prevOpenedBricks, question]);  // prevOpenedBricks is the state before the update
 
     // Update points for the active player
-    updatePlayerPoints(questionIndex);
+    setActivePlayer(prevState => ({
+      ...prevState,  // keep all other properties intact
+      points: prevState.points + (questionIndex * 100 + 100),  // only update points
+    }));
 
     axios.delete("/api/active-players/1").catch((err) => console.log(err));
-    setActivePlayer(null);
-
   }
 
   function initializeGameBoard(data){
-    let categories = []
-    let questionsList = []
+    const categories = []
+    const questionsList = []
     for (let [category, questions] of Object.entries(data)) {
         categories.push(category);
         questionsList.push(questions)
     }
     setCategories(categories);
 
-    // Add gold bricks to random spots
+    // Add 3 gold bricks in random spots within the question grid
     const randomQuestionsList = [...questionsList];
     for (let i = 0; i < 3; i++) {
       const randomCategoryIndex = Math.floor(Math.random() * 6);
@@ -50,7 +40,7 @@ export default function GameBoard({ activePlayer, setActivePlayer, changeModalSt
     setQuestions(randomQuestionsList);
   }
 
-  // Fetch data on mount
+  // Make an API request to fetch questions data on component mount
   useEffect(() => {
     axios
       .get("/api/questions/")
@@ -58,8 +48,11 @@ export default function GameBoard({ activePlayer, setActivePlayer, changeModalSt
       .catch((err) => alert("Pravděpodobně vám chybí otázky v databázi."));
   }, []);
 
-  // Render each question cell
+  // Render the cell for each question
   const renderQuestionCell = (q, questionIndex) => {
+    if (!q) return null;
+
+    // Handle rendering for gold bricks
     if (q.includes("GOLD")) {
       if (openedBricks.includes(q)) {
         return <div className="gold-cell" key={questionIndex}>Zlatá cihla!</div>;
@@ -70,9 +63,13 @@ export default function GameBoard({ activePlayer, setActivePlayer, changeModalSt
           </div>
         );
       }
-    } else if (answeredQuestions.includes(q)) {
+    }
+    // If the question has already been answered, show an empty cell
+    else if (answeredQuestions.includes(q)) {
       return <div className="question-cell" key={questionIndex}></div>;
-    } else {
+    }
+    // Otherwise, render a regular question cell
+    else {
       return (
         <div className="question-cell" key={questionIndex} onClick={() => changeModalState(q, questionIndex)}>
           {questionIndex * 100 + 100}

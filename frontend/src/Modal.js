@@ -12,33 +12,32 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
 
     axios.delete("/api/active-players/1").catch((err) => console.log(err));
 
-      if (response === "correct") {
-        markQuestionAsAnswered(question);
-        changeModalState(question, selectedQuestionPoints);
-        axios.patch(`/api/users/${activePlayer}/`, {answered: false}).catch((err) => console.log(err));
-      } else {
-        axios.patch(`/api/users/${activePlayer}/`, {answered: true}).catch((err) => console.log(err));
-      }
+    let answered = false;
+    let playerPoints = activePlayer.points;
 
-      const playerDiv = document.querySelector(`#player-${activePlayer}`);
-      if (playerDiv) {
-        const pointsElement = playerDiv.querySelector("p.points");
-        let playerPoints = parseInt(pointsElement.textContent, 10);
-        if (response === "correct") {
-          playerPoints += selectedQuestionPoints;
-        } else if (response === "wrong") {
-          playerPoints -= selectedQuestionPoints;
-        }
-        pointsElement.textContent = playerPoints;
-        axios.patch(`/api/users/${activePlayer}/`, {points: playerPoints}).catch((err) => console.log(err));
-      }
+    if (response === "correct") {
+      markQuestionAsAnswered(question);
+      changeModalState(question, selectedQuestionPoints);
+      playerPoints += selectedQuestionPoints;
+    } else if (response === "wrong") {
+      playerPoints -= selectedQuestionPoints;
+      answered = true;
+    }
 
+    setActivePlayer(prevState => ({
+      ...prevState,
+      points: playerPoints,
+    }));
+
+    axios
+      .patch(`/api/users/${activePlayer.user}/`, {points: playerPoints, answered: answered})
+      .catch((err) => console.log(err));
   }
 
   // when the question is closed, close the modal and update users as not having answered
   function close () {
     changeModalState(question, selectedQuestionPoints);
-    axios.patch(`/api/users/${activePlayer}/`, {answered: false}).catch((err) => console.log(err));
+    axios.patch("/api/users/1/", {answered: false}).catch((err) => console.log(err));
   }
 
   return (

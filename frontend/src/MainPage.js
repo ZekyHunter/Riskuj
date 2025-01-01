@@ -12,7 +12,7 @@ export default function MainPage() {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [selectedQuestionPoints, setSelectedQuestionPoints] = useState(null);
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
-  const [activePlayer, setActivePlayer] = useState(null);  // ActivePlayer.user.id
+  const [activePlayer, setActivePlayer] = useState(null);  // ActivePlayer object
 
   useEffect(() => {
     // Start interval on mount
@@ -28,7 +28,7 @@ export default function MainPage() {
         .get("/api/active-players/")
         .then(res => {
            if (res && res.data.length > 0) {
-             setActivePlayer(res.data[0]["user"]);
+             setActivePlayer(res.data[0]);  // returns json from ActivePlayer serializer
            } else {
              setActivePlayer(null);
            }
@@ -49,7 +49,7 @@ export default function MainPage() {
     setAnsweredQuestions([...answeredQuestions, question]);
     setSelectedQuestion(null);
     setSelectedQuestionPoints(null);
-    setActivePlayer(null);
+
   }
 
   function changeModalState(question, questionIndex) {
@@ -72,7 +72,6 @@ export default function MainPage() {
       </div>
 
       <GameBoard
-        activePlayer={activePlayer}
         setActivePlayer={setActivePlayer}
         changeModalState={changeModalState}
         answeredQuestions={answeredQuestions}
