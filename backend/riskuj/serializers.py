@@ -19,4 +19,4 @@ class ActivePlayerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActivePlayer
-        fields = ('id', 'user', 'points', 'timestamp', )
+        fields = ('id', 'player', 'points', 'timestamp', )

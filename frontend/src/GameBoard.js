@@ -18,7 +18,7 @@ export default function GameBoard({ activePlayer, setActivePlayer, changeModalSt
       points: prevState.points + (questionIndex * 100 + 100),  // only update points
     }));
 
-    axios.delete(`/api/active-players/${activePlayer.user}/`).catch((err) => console.log(err));
+    axios.delete(`/api/active-players/${activePlayer.player}/`).catch((err) => console.log(err));
   }
 
   function initializeGameBoard(data){

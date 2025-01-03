@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import GameBoard from "./GameBoard";
 import Modal from "./Modal";
-import UserBoard from "./UserBoard";
+import PlayerBoard from "./PlayerBoard";
 
 
 export default function MainPage() {
 
-  const [users, setUsers] = useState([]);
+  const [players, setPlayers] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [selectedQuestionPoints, setSelectedQuestionPoints] = useState(null);
@@ -18,7 +18,7 @@ export default function MainPage() {
     // Start interval on mount
     const getUsers = setInterval(() => {
       axios
-        .get("/api/users/")
+        .get("/api/players/")
         .then(res => { setUsers(res.data) })
         .catch((err) => console.log(err));
     }, 5000); // Interval runs every 5000ms (5 seconds)
@@ -61,10 +61,10 @@ export default function MainPage() {
     <div>
       <div id="users">
         <h1>Players: </h1>
-        {users.map(user => (
-          <UserBoard
-            key={user.id}
-            user={user}
+        {players.map(player => (
+          <PlayerBoard
+            key={player.id}
+            player={player}
             activePlayer={activePlayer}
           />
         ))}

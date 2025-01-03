@@ -31,14 +31,14 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
     }));
 
     axios
-      .patch(`/api/users/${activePlayer.user}/`, {points: playerPoints, answered: answered})
+      .patch(`/api/players/${activePlayer.user}/`, {points: playerPoints, answered: answered})
       .catch((err) => console.log(err));
   }
 
   // when the question is closed, close the modal and update users as not having answered
   function close () {
     changeModalState(question, selectedQuestionPoints);
-    axios.get("/api/users/clear/").catch((err) => console.log(err));
+    axios.get("/api/players/clear/").catch((err) => console.log(err));
   }
 
   return (

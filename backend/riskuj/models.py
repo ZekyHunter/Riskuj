@@ -47,8 +47,8 @@ class Player(models.Model):
 
 
 class ActivePlayer(models.Model):
-    user = models.ForeignKey(to=Player, on_delete=models.CASCADE, null=True, blank=True)
+    player = models.ForeignKey(to=Player, on_delete=models.CASCADE, null=True, blank=True)
     timestamp = models.IntegerField()
 
     def __str__(self):
-        return self.user.name
+        return self.player.name

@@ -26,7 +26,7 @@ export default function PlayerGameBoard({ player, setPlayer }) {
         .then((res) => {
           if (res.data.length === 0) {
             axios
-              .get(`/api/users/${player.id}/`)
+              .get(`/api/players/${player.id}/`)
               .catch((err) => {console.log(err)})
               .then((res) => {
                 if (!res.data.answered) {

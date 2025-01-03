@@ -10,7 +10,7 @@ export default function AddPlayer({ setPlayer }) {
     e.preventDefault();
 
     axios
-      .post("/api/users/", { name: name, unique_username: uniqueUsername })
+      .post("/api/players/", { name: name, unique_username: uniqueUsername })
       .catch((err) => {console.log(err); alert("This username already exists.")})
       .then((res) => {
         if (res) {
@@ -23,7 +23,7 @@ export default function AddPlayer({ setPlayer }) {
     e.preventDefault();
 
     axios
-      .get(`/api/users/lookup/${uniqueUsername}`)
+      .get(`/api/players/lookup/${uniqueUsername}`)
       .catch((err) => {console.log(err); alert("error")})
       .then((res) => {
         if (res) {
