@@ -11,7 +11,7 @@ export default function PlayerGameBoard({ player, setPlayer }) {
     setButtonDisabled(true);
 
     // POST request to create ActivePlayer entry with timestamp
-    axios.post('/api/button-press/', { user: player.id, timestamp: Date.now() })
+    axios.post('/api/button-press/', { player: player.id, timestamp: Date.now() })
       .catch((err) => console.log(err));
 
   }

@@ -20,12 +20,17 @@ class PlayerView(viewsets.ModelViewSet):
 
     def mark_not_answered(self, request, *args, **kwargs):
         Player.objects.all().update(answered=False)
+        return HttpResponse()
 
 
 class ActivePlayerView(viewsets.ModelViewSet):
 
     serializer_class = ActivePlayerSerializer
     queryset = ActivePlayer.objects.all().order_by("timestamp")
+
+    def destroy(self, request, *args, **kwargs):
+        ActivePlayer.objects.all().delete()
+        return HttpResponse()
 
 
 @api_view(['GET'])
@@ -48,15 +53,15 @@ def get_questions(request):
 
 @api_view(['POST'])
 def button_press(request):
-    user_id = request.data.get('user', None)
-    user = get_object_or_404(Player, id=user_id)
+    player_id = request.data.get('player', None)
+    player = get_object_or_404(Player, id=player_id)
     timestamp = request.data.get('timestamp', None)
     if not ActivePlayer.objects.all().exists():
-        ActivePlayer.objects.create(user=user, timestamp=timestamp)
+        ActivePlayer.objects.create(player=player, timestamp=timestamp)
     else:
         for active_player in ActivePlayer.objects.all():
             if active_player.timestamp > timestamp:
                 active_player.delete()
-                ActivePlayer.objects.create(user=user, timestamp=timestamp)
+                ActivePlayer.objects.create(player=player, timestamp=timestamp)
     return HttpResponse()
 

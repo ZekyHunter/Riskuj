@@ -19,7 +19,7 @@ export default function MainPage() {
     const getUsers = setInterval(() => {
       axios
         .get("/api/players/")
-        .then(res => { setUsers(res.data) })
+        .then(res => { setPlayers(res.data) })
         .catch((err) => console.log(err));
     }, 5000); // Interval runs every 5000ms (5 seconds)
 

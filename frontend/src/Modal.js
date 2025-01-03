@@ -10,7 +10,7 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
 
   function answer (response) {
 
-    axios.delete(`/api/active-players/${activePlayer.user}/`).catch((err) => console.log(err));
+    axios.delete(`/api/active-players/${activePlayer.player}/`).catch((err) => console.log(err));
 
     let answered = false;
     let playerPoints = activePlayer.points;
@@ -31,14 +31,14 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
     }));
 
     axios
-      .patch(`/api/players/${activePlayer.user}/`, {points: playerPoints, answered: answered})
+      .patch(`/api/players/${activePlayer.player}/`, {points: playerPoints, answered: answered})
       .catch((err) => console.log(err));
   }
 
   // when the question is closed, close the modal and update users as not having answered
   function close () {
     changeModalState(question, selectedQuestionPoints);
-    axios.get("/api/players/clear/").catch((err) => console.log(err));
+    axios.get("/api/clear/").catch((err) => console.log(err));
   }
 
   return (
