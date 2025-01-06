@@ -1,3 +1,4 @@
+from django.db.models import Max
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
@@ -13,24 +14,10 @@ class PlayerView(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
     queryset = Player.objects.all()
 
-    def retrieve_by_username(self, request, unique_username=None):
-        player = get_object_or_404(Player, unique_username=unique_username)
-        serializer = PlayerSerializer(player)
-        return Response(serializer.data)
-
-    def mark_not_answered(self, request, *args, **kwargs):
-        Player.objects.all().update(answered=False)
-        return HttpResponse()
-
 
 class ActivePlayerView(viewsets.ModelViewSet):
-
     serializer_class = ActivePlayerSerializer
     queryset = ActivePlayer.objects.all().order_by("timestamp")
-
-    def destroy(self, request, *args, **kwargs):
-        ActivePlayer.objects.all().delete()
-        return HttpResponse()
 
 
 @api_view(['GET'])
@@ -51,17 +38,28 @@ def get_questions(request):
     return Response(data)
 
 
+@api_view(['GET'])
+def retrieve_by_username(request, unique_username=None):
+    player = get_object_or_404(Player, unique_username=unique_username)
+    serializer = PlayerSerializer(player)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 def button_press(request):
     player_id = request.data.get('player', None)
     player = get_object_or_404(Player, id=player_id)
     timestamp = request.data.get('timestamp', None)
-    if not ActivePlayer.objects.all().exists():
+    latest_timestamp = ActivePlayer.objects.aggregate(Max('timestamp'))['timestamp__max']
+    if not latest_timestamp or timestamp < latest_timestamp:
+        ActivePlayer.objects.all().delete()
         ActivePlayer.objects.create(player=player, timestamp=timestamp)
-    else:
-        for active_player in ActivePlayer.objects.all():
-            if active_player.timestamp > timestamp:
-                active_player.delete()
-                ActivePlayer.objects.create(player=player, timestamp=timestamp)
     return HttpResponse()
 
+
+@api_view(['GET'])
+def clear(request):
+    players = Player.objects.filter(answered=True)
+    players.update(answered=False)
+    ActivePlayer.objects.all().delete()
+    return HttpResponse()

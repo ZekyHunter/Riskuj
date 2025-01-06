@@ -13,6 +13,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/questions/', views.get_questions, name='question'),
     path('api/button-press/', views.button_press, name='button-press'),
-    path('api/players/lookup/<str:unique_username>/', views.PlayerView.as_view({'get': 'retrieve_by_username'})),
-    path('api/clear/', views.PlayerView.as_view({'get': 'mark_not_answered'})),
+    path('api/players/lookup/<str:unique_username>/', views.retrieve_by_username, name='retrieve-by-username'),
+    path('api/clear/', views.clear, name="clear"),
 ]
