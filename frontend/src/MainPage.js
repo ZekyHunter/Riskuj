@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import GameBoard from "./GameBoard";
-import Modal from "./Modal";
+import Question from "./Question";
 import PlayerBoard from "./PlayerBoard";
 import { INTERVAL_DURATION } from "./config";
 
@@ -11,7 +11,7 @@ export default function MainPage() {
   const [players, setPlayers] = useState([]);
   const [categories, setCategories] = useState([]);
   const [questions, setQuestions] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [questionOpened, setQuestionOpened] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [selectedQuestionPoints, setSelectedQuestionPoints] = useState(null);
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
@@ -22,13 +22,7 @@ export default function MainPage() {
     const fetchPlayers = () => {
       axios
         .get("/api/players/")
-        .then(res => {
-          setPlayers(res.data);
-          if (!currentTurn) {
-            const randomPlayer = res.data[Math.floor(Math.random() * res.data.length)];
-            setCurrentTurn(randomPlayer);
-          }
-        })
+        .then(res => setPlayers(res.data))
         .catch(err => console.log(err));
 
       axios
@@ -45,9 +39,13 @@ export default function MainPage() {
       .catch((err) => console.log(err));
 
     axios
-        .get("/api/players/")
-        .then(res => {setPlayers(res.data); setCurrentTurn(res.data[Math.floor(Math.random() * res.data.length)]);})
-        .catch(err => console.log(err));
+      .get("/api/players/")
+      .then(res => {
+        setPlayers(res.data);
+        const randomPlayer = res.data[Math.floor(Math.random() * res.data.length)];
+        setCurrentTurn(randomPlayer);
+      })
+      .catch(err => console.log(err));
 
     return () => clearInterval(intervalId);
   }, []);
@@ -59,13 +57,13 @@ export default function MainPage() {
   }
 
   function openQuestion(question, questionIndex) {
-    setModalOpen(true);
+    setQuestionOpened(true);
     setSelectedQuestion(question);
     setSelectedQuestionPoints(questionIndex * 100 + 100);
   }
 
   function closeQuestion() {
-    setModalOpen(false);
+    setQuestionOpened(false);
     setSelectedQuestion(null);
     setSelectedQuestionPoints(null);
   }
@@ -100,7 +98,7 @@ export default function MainPage() {
         ))}
       </div>
 
-      {!modalOpen ? (
+      {!questionOpened ? (
         <GameBoard
           categories={categories}
           questions={questions}
@@ -112,8 +110,8 @@ export default function MainPage() {
           currentTurn={currentTurn}
         />
       ) : (
-        <Modal
-          modalOpen={modalOpen}
+        <Question
+          questionOpened={questionOpened}
           question={selectedQuestion}
           openQuestion={openQuestion}
           closeQuestion={closeQuestion}

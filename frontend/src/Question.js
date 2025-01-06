@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./Modal.css";
+import "./Question.css";
 
 
-export default function Modal({ modalOpen, question, openQuestion, closeQuestion, markQuestionAsAnswered, activePlayer,
+export default function Question({ questionOpened, question, openQuestion, closeQuestion, markQuestionAsAnswered, activePlayer,
   selectedQuestionPoints, setActivePlayer, currentTurn, setCurrentTurn, players }) {
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -12,7 +12,7 @@ export default function Modal({ modalOpen, question, openQuestion, closeQuestion
     setButtonDisabled(!!!activePlayer); // !! converts activePlayer to a boolean
   }, [activePlayer]);
 
-  if (!modalOpen) return null;
+  if (!questionOpened) return null;
 
   function answer (response) {
     let answered = false;
@@ -22,7 +22,6 @@ export default function Modal({ modalOpen, question, openQuestion, closeQuestion
       markQuestionAsAnswered(question);
       closeQuestion();
       playerPoints += selectedQuestionPoints;
-
     } else if (response === "wrong") {
       // if the user answers wrongly, other players may still answer
       playerPoints -= selectedQuestionPoints;
