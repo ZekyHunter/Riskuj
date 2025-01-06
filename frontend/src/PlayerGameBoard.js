@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { INTERVAL_DURATION } from "./config";
 
 export default function PlayerGameBoard({ player, setPlayer }) {
 
@@ -37,10 +38,10 @@ export default function PlayerGameBoard({ player, setPlayer }) {
           }
         })
         .catch((err) => console.log(err));
-    }, 5000);
+    }, INTERVAL_DURATION);
 
     return () => {
-      clearInterval();  // Clear any interval if the component is unmounted
+      clearInterval(intervalId);  // Clear any interval if the component is unmounted
     };
   }, []);
 

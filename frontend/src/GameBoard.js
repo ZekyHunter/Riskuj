@@ -3,50 +3,17 @@ import "./GameBoard.css";
 import axios from "axios";
 
 
-export default function GameBoard({ activePlayer, setActivePlayer, changeModalState, answeredQuestions }) {
+export default function GameBoard({ categories, questions, activePlayer, setActivePlayer, openQuestion,
+answeredQuestions, players, currentTurn }) {
 
-  const [categories, setCategories] = useState([]);
-  const [questions, setQuestions] = useState([]);
   const [openedBricks, setOpenedBricks] = useState([]);
 
   function revealGold(question, questionIndex){
-    setOpenedBricks((prevOpenedBricks) => [...prevOpenedBricks, question]);  // prevOpenedBricks is the state before the update
-
-    // Update points for the active player
-    setActivePlayer(prevState => ({
-      ...prevState,  // keep all other properties intact
-      points: prevState.points + (questionIndex * 100 + 100),  // only update points
-    }));
-
-    axios.delete(`/api/active-players/${activePlayer.player}/`).catch((err) => console.log(err));
-  }
-
-  function initializeGameBoard(data){
-    const categories = []
-    const questionsList = []
-    for (let [category, questions] of Object.entries(data)) {
-        categories.push(category);
-        questionsList.push(questions)
-    }
-    setCategories(categories);
-
-    // Add 3 gold bricks in random spots within the question grid
-    const randomQuestionsList = [...questionsList];
-    for (let i = 0; i < 3; i++) {
-      const randomCategoryIndex = Math.floor(Math.random() * 6);
-      const randomQuestionIndex = Math.floor(Math.random() * 5);
-      randomQuestionsList[randomCategoryIndex][randomQuestionIndex] = `GOLD ${i + 1}`;
-    }
-    setQuestions(randomQuestionsList);
-  }
-
-  // Make an API request to fetch questions data on component mount
-  useEffect(() => {
+    setOpenedBricks((prevOpenedBricks) => [...prevOpenedBricks, question]);
     axios
-      .get("/api/questions/")
-      .then(res => { initializeGameBoard(res.data) })
+      .patch(`/api/players/${currentTurn.id}/`, {points: currentTurn.points + (questionIndex * 100 + 100)})
       .catch((err) => console.log(err));
-  }, []);
+  }
 
   // Render the cell for each question
   const renderQuestionCell = (q, questionIndex) => {
@@ -71,7 +38,7 @@ export default function GameBoard({ activePlayer, setActivePlayer, changeModalSt
     // Otherwise, render a regular question cell
     else {
       return (
-        <div className="question-cell" key={questionIndex} onClick={() => changeModalState(q, questionIndex)}>
+        <div className="question-cell" key={questionIndex} onClick={() => openQuestion(q, questionIndex)}>
           {questionIndex * 100 + 100}
         </div>
       );
@@ -91,5 +58,5 @@ export default function GameBoard({ activePlayer, setActivePlayer, changeModalSt
         </div>
       ))}
     </div>
-  );
+  )
 }
