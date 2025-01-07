@@ -2,20 +2,24 @@ import React from "react";
 import axios from "axios";
 import "./Modal.css";
 
-
-export default function Modal({ modalOpen, question, changeModalState, markQuestionAsAnswered, activePlayer,
-  selectedQuestionPoints, setActivePlayer }) {
-
+export default function Modal({
+  modalOpen,
+  question,
+  changeModalState,
+  markQuestionAsAnswered,
+  activePlayer,
+  selectedQuestionPoints,
+  setActivePlayer,
+}) {
   if (!modalOpen) return null;
 
-  function answer (response) {
-
+  function answer(response) {
     const playerDivs = document.getElementsByClassName("player");
     for (let element of playerDivs) {
-      const p = element.querySelector('p.username');
+      const p = element.querySelector("p.username");
 
       if (p.parentElement.id === String(activePlayer)) {
-        const pointsElement = element.querySelector("p.points")
+        const pointsElement = element.querySelector("p.points");
         let playerPoints = parseInt(pointsElement.textContent, 10);
 
         if (response === "correct") {
@@ -32,13 +36,14 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
         markQuestionAsAnswered(question);
         changeModalState(question, selectedQuestionPoints);
       } else {
-        axios.patch(`/api/users/${activePlayer}/`, {answered: true}).catch((err) => console.log(err));
+        axios
+          .patch(`/api/users/${activePlayer}/`, { answered: true })
+          .catch((err) => console.log(err));
         // deselect active player
         setActivePlayer(null);
         //TODO: find out player id
         // TODO: update player in db { answered: true }
       }
-
     }
 
     axios.delete("/api/active-players/1").catch((err) => console.log(err));
@@ -48,11 +53,12 @@ export default function Modal({ modalOpen, question, changeModalState, markQuest
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h2 style={{color:"black"}}>{question}</h2>
+        <h2 style={{ color: "black" }}>{question}</h2>
         <button onClick={() => answer("correct")}>Správná odpověď</button>
         <button onClick={() => answer("wrong")}>Špatná odpověď</button>
+        <br></br>
         <button onClick={() => changeModalState(question)}>Zavřít</button>
       </div>
     </div>
   );
-};
+}
