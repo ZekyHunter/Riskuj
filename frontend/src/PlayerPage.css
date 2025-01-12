@@ -1,6 +1,66 @@
-#main-button:disabled {
-  background-color: gray;  /* Change the background to gray */
-  color: #ccc;             /* Optionally change the text color */
-  cursor: not-allowed;     /* Change cursor to indicate it's disabled */
-  border: 1px solid #ccc;  /* Optional: change border color to match the disabled look */
+@import url("https://fonts.googleapis.com/css2?family=Anta&family=Archivo+Black&family=Cairo:wght@200..1000&family=Karla:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Merriweather&family=Orbit&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Sintony:wght@400;700&family=Work+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anta&family=Archivo+Black&family=Karla:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Merriweather&family=Orbit&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Sintony:wght@400;700&family=Work+Sans&display=swap");
+
+#player-page {
+  display: flex;
+  justify-content: center;
+  padding-top: 2.5rem;
+  background-color: #212646;
+  color: white;
+  font-family: "Anta", sans-serif;
+}
+
+#player-page form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background-color: #2a2f55; /* Slightly different background */
+  border-radius: 0.5rem;
+}
+
+/* Input field styles */
+#player-page input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  font-family: roboto condensed, sans-serif;
+  border: 2px solid #555;
+  border-radius: 0.5rem;
+  outline: none;
+  background-color: #333;
+  color: white;
+}
+
+#player-page input[type="text"]::placeholder {
+  color: #bbb;
+}
+
+#player-page input {
+  all: unset;
+  display: block;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-family: "Anta", sans-serif;
+  font-weight: bold;
+  color: white;
+  background-color: #c64100;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#player-page input:last-child:hover {
+  background-color: #f28e3b;
+}
+
+/* Heading styling */
+#player-page h2 {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: #f0f0f0;
+  text-align: center;
 }

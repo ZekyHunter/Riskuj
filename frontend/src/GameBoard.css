@@ -1,40 +1,35 @@
-@import url("https://fonts.googleapis.com/css2?family=Sintony:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anta&family=Archivo+Black&family=Karla:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Merriweather&family=Orbit&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Sintony:wght@400;700&family=Work+Sans&display=swap");
 
-.game-board {
-}
-
-.oneCategoryRow {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding-bottom: 0.5rem;
-}
-
-.category-cell {
+.category {
   background-color: #ffd200; /* Odstín kategorie */
   color: rgb(0, 0, 0);
   font-weight: bold;
-  font-size: x-large;
+  font-size: 1.7rem;
+  text-transform: uppercase;
+  font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  border: 0.5rem solid #ffffff;
-  border-radius: 1rem;
+  border: 0.3rem solid #ffffff;
+  border-radius: 0.5rem;
   padding: 2.2rem 0.5rem;
   margin: 0.5rem;
-  width: 10rem;
+  width: 13rem;
+  box-shadow: inset 8px 8px 12px rgba(0, 0, 0, 0.6),
+    inset -1px -1px 1px rgba(255, 255, 255, 0.5);
 }
 
-.question-cell {
-  background-color: #c64100; /* Odstín pro otázky */
+.question-cell-empty {
+  background-color: #212646; /* Odstín pro otázky */
   color: white;
   font-size: x-large;
+  font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  border: 0.5rem solid #ffffff;
+  border: 0.3rem solid #212646;
   border-radius: 1rem;
   padding: 2.2rem 0.5rem;
   margin: 0.5rem;
@@ -42,19 +37,47 @@
   cursor: pointer;
 }
 
-.gold-cell {
-  background-color: #FFD700; /* Zlata cihlicka */
-  color: black;
-  font-size: x-large;
+.oneCategoryRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.question-cell {
+  background-color: #c64100; /* Odstín pro otázky */
+  color: white;
+  font-size: 3rem;
+  font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  border: 0.5rem solid #FFD700;
-  border-radius: 1rem;
+  border: 0.3rem solid #ffffff;
+  border-radius: 0.5rem;
   padding: 2.2rem 0.5rem;
   margin: 0.5rem;
   width: 10rem;
+  cursor: pointer;
+  box-shadow: inset 8px 8px 12px rgba(0, 0, 0, 0.6),
+    inset -1px -1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.gold-cell {
+  background-color: #ffd700; /* Zlata cihlicka */
+  color: black;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 0.3rem solid #fff;
+  border-color: white #ffd700 #ffd700 white;
+  border-radius: 0.5rem;
+  padding: 2.2rem 0.5rem;
+  margin: 0.5rem;
+  width: 10rem;
+  box-shadow: inset 8px 8px 17px rgba(255, 255, 255, 0.7),
+    inset -1px -1px 6px rgba(255, 200, 20, 0.7);
   cursor: pointer;
 }
 
@@ -63,10 +86,10 @@
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Anta", sans-serif;
 }
 
 .category-cell,
 .question-cell {
-  font-family: "Roboto", sans-serif;
+  font-family: "Anta", sans-serif;
 }
