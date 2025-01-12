@@ -18,7 +18,6 @@ export default function PlayerGameBoard({ player, setPlayer }) {
   }
 
   useEffect(() => {
-
     // Start interval on component mount
     // Continuously check if the button should be enabled or disabled
     const intervalId = setInterval(() => {

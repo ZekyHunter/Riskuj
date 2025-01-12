@@ -11,12 +11,20 @@ export default function MainPage() {
   const [players, setPlayers] = useState([]);
   const [categories, setCategories] = useState([]);
   const [questions, setQuestions] = useState([]);
+  const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const [questionOpened, setQuestionOpened] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [selectedQuestionPoints, setSelectedQuestionPoints] = useState(null);
-  const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const [activePlayer, setActivePlayer] = useState(null);  // ActivePlayer object
   const [currentTurn, setCurrentTurn] = useState(null);  // Player object
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  function getQuestions () {
+    axios
+      .get("/api/questions/")
+      .then(res => { initializeGameBoard(res.data) })
+      .catch((err) => setErrorMessage("Nepodařilo se načíst hrací plochu."));
+  }
 
   useEffect(() => {
     const fetchPlayers = () => {
@@ -33,10 +41,7 @@ export default function MainPage() {
 
     const intervalId = setInterval(fetchPlayers, INTERVAL_DURATION);
 
-    axios
-      .get("/api/questions/")
-      .then(res => { initializeGameBoard(res.data) })
-      .catch((err) => console.log(err));
+    getQuestions();
 
     axios
       .get("/api/players/")
@@ -59,7 +64,7 @@ export default function MainPage() {
   function openQuestion(question, questionIndex) {
     setQuestionOpened(true);
     setSelectedQuestion(question);
-    setSelectedQuestionPoints(questionIndex * 100 + 100);
+    setSelectedQuestionPoints(questionIndex * 100);
   }
 
   function closeQuestion() {
@@ -69,6 +74,8 @@ export default function MainPage() {
   }
 
   function initializeGameBoard(data){
+    setErrorMessage(null);
+
     const categories = Object.keys(data);
     const questionsList = Object.values(data);
 
@@ -97,6 +104,13 @@ export default function MainPage() {
           />
         ))}
       </div>
+
+      { errorMessage &&  (
+        <div id="errorMessage" >
+          <h1>{ errorMessage }</h1>
+          <button onClick={() => getQuestions()} >Zkusit znovu</button>
+        </div>
+      )}
 
       {!questionOpened ? (
         <GameBoard

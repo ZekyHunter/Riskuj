@@ -11,12 +11,12 @@ answeredQuestions, players, currentTurn }) {
   function revealGold(question, questionIndex){
     setOpenedBricks((prevOpenedBricks) => [...prevOpenedBricks, question]);
     axios
-      .patch(`/api/players/${currentTurn.id}/`, {points: currentTurn.points + (questionIndex * 100 + 100)})
+      .patch(`/api/players/${currentTurn.id}/`, {points: currentTurn.points + (questionIndex * 100)})
       .catch((err) => console.log(err));
   }
 
   // Render the cell for each question
-  const renderQuestionCell = (q, questionIndex) => {
+  const renderQuestionCell = (q, questionIndex, category) => {
     if (!q) return null;
 
     // Handle rendering for gold bricks
@@ -26,20 +26,28 @@ answeredQuestions, players, currentTurn }) {
       } else {
         return (
           <div className="question-cell" key={questionIndex} onClick={() => revealGold(q, questionIndex)}>
-            {questionIndex * 100 + 100}
+            {questionIndex * 100}
           </div>
         );
       }
     }
     // If the question has already been answered, show an empty cell
     else if (answeredQuestions.includes(q)) {
-      return <div className="question-cell" key={questionIndex}></div>;
+      return <div className="answered-cell" key={questionIndex}></div>;
+    }
+    // Handle rendering bonus questions
+    else if (questionIndex === 0) {
+      return (
+        <div className="category-cell" key={questionIndex} onClick={() => openQuestion(q, questionIndex)}>
+          { category }
+        </div>
+      );
     }
     // Otherwise, render a regular question cell
     else {
       return (
         <div className="question-cell" key={questionIndex} onClick={() => openQuestion(q, questionIndex)}>
-          {questionIndex * 100 + 100}
+          {questionIndex * 100}
         </div>
       );
     }
@@ -50,9 +58,8 @@ answeredQuestions, players, currentTurn }) {
       {categories.map((category, mapIndex) => (
         <div key={mapIndex}>
           <div className="oneCategoryRow">
-            {category}
             {questions[mapIndex]?.map((question, questionIndex) =>
-              renderQuestionCell(question, questionIndex)
+              renderQuestionCell(question, questionIndex, category)
             )}
           </div>
         </div>

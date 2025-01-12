@@ -14,6 +14,7 @@ class Category(models.Model):
 
 class Question(models.Model):
     POINTS = [
+        ("BONUS", "Bonusová otázka"),
         ("100", "One hundred"),
         ("200", "Two hundred"),
         ("300", "Three hundred"),

@@ -29,7 +29,7 @@ def get_questions(request):
         questions = Question.objects.filter(category=category)
         category_questions = []
 
-        for pt in ['100', '200', '300', '400', '500']:
+        for pt in ['BONUS', '100', '200', '300', '400', '500']:
             question = questions.filter(points=pt).first()
             category_questions.append(question.text)
 
