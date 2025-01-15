@@ -1,3 +1,6 @@
+import os
+import sys
+
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -8,6 +11,12 @@ from django.shortcuts import get_object_or_404
 
 from .serializers import PlayerSerializer, ActivePlayerSerializer
 from .models import Question, Player, Category, ActivePlayer
+
+from django.shortcuts import render
+
+
+def index(request):
+    return render(request, 'public/index.html')
 
 
 class PlayerView(viewsets.ModelViewSet):

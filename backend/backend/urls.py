@@ -9,6 +9,8 @@ router.register(r'users', views.PlayerView, 'user')
 router.register(r'active-players', views.ActivePlayerView, 'active-player')
 
 urlpatterns = [
+    path('/', views.index, name='index'),
+    path('/player', views.index, name='player'),
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/questions/', views.get_questions, name='question'),
