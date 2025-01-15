@@ -28,10 +28,18 @@ export default function Question({ questionOpened, question, openQuestion, close
     setTimeLeft(30);
   };
 
+  // when the question is closed, close the Question component, remove activePlayer and update users.answered = false
+  function close () {
+    markQuestionAsAnswered(question);
+    closeQuestion();
+    axios.get("/api/clear/").catch((err) => console.log(err));
+  }
+
   useEffect(() => {
     if (timeLeft <= 0 && isRunning) {
-      alert("Time out!");
+      // TODO: Add sound effect
       stopTimer();
+      close();
     }
   }, [timeLeft, isRunning]);
 
@@ -79,12 +87,7 @@ export default function Question({ questionOpened, question, openQuestion, close
     axios.get("/api/clear/").catch((err) => console.log(err));
   }
 
-  // when the question is closed, close the Question component, remove activePlayer and update users.answered = false
-  function close () {
-    markQuestionAsAnswered(question);
-    closeQuestion();
-    axios.get("/api/clear/").catch((err) => console.log(err));
-  }
+
 
   return (
     <div>
