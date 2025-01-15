@@ -12,6 +12,7 @@ export default function MainPage() {
   const [categories, setCategories] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
+  const [openedBricks, setOpenedBricks] = useState([]);
   const [questionOpened, setQuestionOpened] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [selectedQuestionPoints, setSelectedQuestionPoints] = useState(null);
@@ -120,6 +121,8 @@ export default function MainPage() {
           setActivePlayer={setActivePlayer}
           openQuestion={openQuestion}
           answeredQuestions={answeredQuestions}
+          openedBricks={openedBricks}
+          setOpenedBricks={setOpenedBricks}
           players={players}
           currentTurn={currentTurn}
         />

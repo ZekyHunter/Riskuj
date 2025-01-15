@@ -4,9 +4,7 @@ import axios from "axios";
 
 
 export default function GameBoard({ categories, questions, activePlayer, setActivePlayer, openQuestion,
-answeredQuestions, players, currentTurn }) {
-
-  const [openedBricks, setOpenedBricks] = useState([]);
+answeredQuestions, openedBricks, setOpenedBricks, players, currentTurn }) {
 
   function revealGold(question, questionIndex){
     setOpenedBricks((prevOpenedBricks) => [...prevOpenedBricks, question]);
@@ -23,7 +21,15 @@ answeredQuestions, players, currentTurn }) {
     if (q.includes("GOLD")) {
       if (openedBricks.includes(q)) {
         return <div className="gold-cell" key={questionIndex}>Zlatá cihla!</div>;
-      } else {
+      }
+      else if (questionIndex === 0) {
+        return (
+          <div className="category-cell" key={questionIndex} onClick={() => revealGold(q, questionIndex)}>
+            { category }
+          </div>
+        );
+      }
+      else {
         return (
           <div className="question-cell" key={questionIndex} onClick={() => revealGold(q, questionIndex)}>
             {questionIndex * 100}
