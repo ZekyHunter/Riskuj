@@ -16,8 +16,10 @@ import os
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
+# had to remove pathlib because of an AttributeError: 'PosixPath' object has no attribute 'startswith'
+# BASE_DIR = Path(__file__).resolve().parent.parent.parent  
+BASE_DIR = '/home/admin/riskuj/riskuj/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -64,7 +66,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            '/home/admin/riskuj/riskuj/frontend',
             TEMPLATE_DIR,
             TEMPLATE_DIR + 'public'
         ],
@@ -86,25 +87,16 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# local development
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# production server
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'riskuj',
-#         'USER': 'riskuj',
-#         'PASSWORD': 'gorale',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'NAME': 'riskuj',
+         'USER': 'riskuj',
+         'PASSWORD': 'gorale',
+         'HOST': 'localhost',
+         'PORT': '',
+     }
+ }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -140,8 +132,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = '/home/admin/riskuj/riskuj/backend/static'
+STATIC_URL = os.path.join(os.path.dirname(BASE_DIR), 'static/')
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static/')
 
 STATICFILES_DIRS = []
 
