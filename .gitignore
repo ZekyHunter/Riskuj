@@ -27,3 +27,11 @@ yarn-error.log*
 .idea
 migrations
 backend/db.sqlite3
+
+backend/backend/__pycache__/
+backend/riskuj/__pycache__/
+backend/riskuj/management/__pycache__/
+backend/riskuj/management/commands/__pycache__/
+backend/static/
+backend/venv/
+frontend/build/
