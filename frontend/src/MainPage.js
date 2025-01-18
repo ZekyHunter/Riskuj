@@ -94,14 +94,14 @@ export default function MainPage() {
 
   return (
     <div>
-      <div id="users">
+      <div id="users" className="player-container">
         <p>Hráč na tahu: {currentTurn ? (currentTurn.name) : (null)}</p>
-        <h1>Players: </h1>
         {players.map(player => (
           <PlayerBoard
             key={player.id}
             player={player}
             activePlayer={activePlayer}
+            currentTurn={currentTurn}
           />
         ))}
       </div>

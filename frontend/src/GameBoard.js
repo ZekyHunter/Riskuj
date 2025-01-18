@@ -24,7 +24,7 @@ answeredQuestions, openedBricks, setOpenedBricks, players, currentTurn }) {
       }
       else if (questionIndex === 0) {
         return (
-          <div className="category-cell" key={questionIndex} onClick={() => revealGold(q, questionIndex)}>
+          <div className="category" key={questionIndex} onClick={() => revealGold(q, questionIndex)}>
             { category }
           </div>
         );
@@ -39,12 +39,12 @@ answeredQuestions, openedBricks, setOpenedBricks, players, currentTurn }) {
     }
     // If the question has already been answered, show an empty cell
     else if (answeredQuestions.includes(q)) {
-      return <div className="answered-cell" key={questionIndex}></div>;
+      return <div className="question-cell-empty" key={questionIndex}></div>;
     }
     // Handle rendering bonus questions
     else if (questionIndex === 0) {
       return (
-        <div className="category-cell" key={questionIndex} onClick={() => openQuestion(q, questionIndex)}>
+        <div className="category" key={questionIndex} onClick={() => openQuestion(q, questionIndex)}>
           { category }
         </div>
       );

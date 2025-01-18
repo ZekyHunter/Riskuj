@@ -35,9 +35,11 @@ export default function Question({ questionOpened, question, openQuestion, close
     axios.get("/api/clear/").catch((err) => console.log(err));
   }
 
+  // when timer runs out
   useEffect(() => {
     if (timeLeft <= 0 && isRunning) {
       // TODO: Add sound effect
+      // what happens when time runs out?
       stopTimer();
       close();
     }
@@ -48,7 +50,7 @@ export default function Question({ questionOpened, question, openQuestion, close
   }, [timerId]);
 
   useEffect(() => {
-    setButtonDisabled(!!!activePlayer); // !! converts activePlayer to a boolean
+    setButtonDisabled(!!!activePlayer); // !! converts activePlayer to a boolean, ! negates the statement
   }, [activePlayer]);
 
   useEffect(() => {
@@ -63,11 +65,13 @@ export default function Question({ questionOpened, question, openQuestion, close
     let playerPoints = activePlayer.points;
 
     if (response === "correct") {
+      // TODO: what happens when this is a bonus question? (therefore no points to award)
       markQuestionAsAnswered(question);
       closeQuestion();
       playerPoints += selectedQuestionPoints;
     } else if (response === "wrong") {
       // if the user answers wrongly, other players may still answer
+      // TODO: what happens to the timer when player answers wrong? Does it continue? Reset for the next player?
       playerPoints -= selectedQuestionPoints;
       answered = true;
     }
@@ -86,8 +90,6 @@ export default function Question({ questionOpened, question, openQuestion, close
 
     axios.get("/api/clear/").catch((err) => console.log(err));
   }
-
-
 
   return (
     <div>
