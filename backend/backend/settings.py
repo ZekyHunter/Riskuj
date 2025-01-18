@@ -13,8 +13,6 @@ import sys
 from pathlib import Path
 import os
 
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -84,6 +82,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+# TODO: Change to environment variables
 
 # local development
 DATABASES = {

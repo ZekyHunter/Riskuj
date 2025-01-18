@@ -15,6 +15,8 @@ class PlayerSerializer(serializers.ModelSerializer):
 
 
 class ActivePlayerSerializer(serializers.ModelSerializer):
+    points = serializers.IntegerField(source='player.points')
+
     class Meta:
         model = ActivePlayer
-        fields = ('id', 'user', 'timestamp', )
+        fields = ('id', 'player', 'points', 'timestamp', )

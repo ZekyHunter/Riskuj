@@ -9,8 +9,11 @@ export default function PlayerPage() {
 
   return (
     <div id="player-page">
-      {player ? (
-        <PlayerGameBoard player={player} />
+      { player ? (
+        <PlayerGameBoard
+          player={player}
+          setPlayer={setPlayer}
+        />
       ) : (
         <AddPlayer setPlayer={setPlayer} />
       )}

@@ -16,7 +16,7 @@ class PlayerAdmin(admin.ModelAdmin):
 
 
 class ActivePlayerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'timestamp')
+    list_display = ('id', 'player', 'timestamp')
 
 
 admin.site.register(Category, CategoryAdmin)
