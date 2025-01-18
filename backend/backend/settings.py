@@ -14,8 +14,10 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
+# had to remove pathlib because of an AttributeError: 'PosixPath' object has no attribute 'startswith'
+# BASE_DIR = Path(__file__).resolve().parent.parent.parent  
+BASE_DIR = '/home/admin/riskuj/riskuj/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -82,28 +84,18 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 # TODO: Change to environment variables
 
-# local development
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# production server
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'riskuj',
-#         'USER': 'riskuj',
-#         'PASSWORD': 'gorale',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'NAME': 'riskuj',
+         'USER': 'riskuj',
+         'PASSWORD': 'gorale',
+         'HOST': 'localhost',
+         'PORT': '',
+     }
+ }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -140,7 +132,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static/')
+
+STATICFILES_DIRS = []
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
