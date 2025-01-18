@@ -21,7 +21,9 @@ class Command(BaseCommand):
                 'Kdy byla podepsána Magna Charta?',
                 'Kdo byl generálem při bitvě u Stalingradu?',
                 'Co znamenal „Pád Berlínské zdi“?',
-                'Jaký rok byl začátek americké občanské války?'
+                'Jaký rok byl začátek americké občanské války?',
+                'Který rok se považuje za začátek první světové války?',
+                'Jak se jmenoval první československý prezident?'
             ],
             'Geografie': [
                 'Jaké je hlavní město Francie?',
@@ -33,7 +35,9 @@ class Command(BaseCommand):
                 'Jaký je největší ostrov na světě?',
                 'Na jakém kontinentu leží stát Etiopie?',
                 'Kde se nachází město Tokyo?',
-                'Jaké moře je mezi Itálií a Balkánem?'
+                'Jaké moře je mezi Itálií a Balkánem?',
+                'Jaké je hlavní město Brazílie?',
+                'Která řeka je nejdelší na světě?'
             ],
             'Literatura': [
                 'Kdo napsal román „1984“?',
@@ -45,7 +49,9 @@ class Command(BaseCommand):
                 'Kdo napsal detektivní romány o Hercule Poirot?',
                 'Jaký spisovatel vytvořil postavu Sherlocka Holmese?',
                 'Jaké město je dějištěm románu „Na Větrné hůrce“?',
-                'Kdo napsal „Sto roků samoty“?'
+                'Kdo napsal „Sto roků samoty“?',
+                'Kdo napsal román 1984?',
+                'Jak se jmenuje hlavní postava románu Malý princ?'
             ],
             'Věda': [
                 'Kdo vynalezl teorii relativity?',
@@ -57,7 +63,9 @@ class Command(BaseCommand):
                 'Co je nejlehčí plyn na Zemi?',
                 'Kdo vynalezl telefon?',
                 'Co je to fotosyntéza?',
-                'Co je za hranicí vesmíru?'
+                'Co je za hranicí vesmíru?',
+                'Kdo je známý jako objevitel gravitace?',
+                'Jaký chemický prvek má symbol H?'
             ],
             'Umění': [
                 'Kdo namaloval „Mona Lisu“?',
@@ -69,7 +77,9 @@ class Command(BaseCommand):
                 'Kdo napsal balet „Louskáček“?',
                 'Kdo vytvořil sochu „Myšlenka“?',
                 'Kdo je autorem opera „Carmen“?',
-                'Kdo napsal hudbu k „Maškarnímu bálu“?'
+                'Kdo napsal hudbu k „Maškarnímu bálu“?',
+                'Který malíř vytvořil slavný obraz Mona Lisa?',
+                'Jak se jmenuje období, ve kterém vznikaly díla jako Michelangelova David?'
             ],
             'Sport': [
                 'Kdo vyhrál mistrovství světa ve fotbale v roce 2018?',
@@ -81,7 +91,9 @@ class Command(BaseCommand):
                 'Jaký je název největší fotbalové ligy na světě?',
                 'Kolik hráčů je v jednom týmu v basketbalu?',
                 'Jaké zvíře je symbolem olympijských her?',
-                'Kde se konají zimní olympijské hry v roce 2026?'
+                'Kde se konají zimní olympijské hry v roce 2026?',
+                'Kolik hráčů má fotbalový tým na hřišti během zápasu?',
+                'Jak se jmenuje slavný tenista, který vyhrál nejvíce grandslamových titulů do roku 2025?'
             ],
             'Filmy a Televize': [
                 'Kdo režíroval film „Titanic“?',
@@ -93,7 +105,9 @@ class Command(BaseCommand):
                 'Kdo je režisérem filmu „Pulp Fiction“?',
                 'Jaké zvíře je hlavní postavou ve filmu „Hledá se Nemo“?',
                 'Kdo je režisérem trilogie „Pán prstenů“?',
-                'Jak se jmenuje film o osudu planety Země po katastrofě?'
+                'Jak se jmenuje film o osudu planety Země po katastrofě?',
+                'Kdo zrežíroval trilogii Pán prstenů?',
+                'Jak se jmenuje oblíbený animovaný seriál o rodině žijící ve Springfieldu?'
             ],
             'Hudba': [
                 'Kdo napsal píseň „Imagine“?',
@@ -105,7 +119,9 @@ class Command(BaseCommand):
                 'Kdo zpíval hit „I Will Always Love You“?',
                 'Kdo byl zpěvákem skupiny Queen?',
                 'Jaký nástroj hraje virtuóz Itzhak Perlman?',
-                'Jaké je skutečné jméno zpěváka „Lady Gaga“?'
+                'Jaké je skutečné jméno zpěváka „Lady Gaga“?',
+                'Který nástroj byl typický pro hudbu Ludwiga van Beethovena?',
+                'Jak se jmenuje britská kapela, která vytvořila album Abbey Road?'
             ],
             'Technologie': [
                 'Kdo je zakladatelem společnosti Microsoft?',
@@ -117,7 +133,9 @@ class Command(BaseCommand):
                 'Co znamená zkratka „HTTP“?',
                 'Jaký je název největší sociální sítě?',
                 'Kdo je zakladatelem společnosti Tesla?',
-                'Co je to blockchain?'
+                'Co je to blockchain?',
+                'Kdo založil společnost Microsoft?',
+                'Jak se jmenuje největší internetový vyhledávač na světě?'
             ],
             'Jazyky': [
                 'Jaký jazyk je oficiálním jazykem v Brazílii?',
@@ -129,14 +147,16 @@ class Command(BaseCommand):
                 'Jaký jazyk je úředním jazykem v Indii kromě hindštiny?',
                 'Kdo vynalezl písmo?',
                 'Jaké slovo znamená v angličtině „děkuji“?',
-                'Kolik pádů má čeština?'
+                'Kolik pádů má čeština?',
+                'Který jazyk má nejvíce rodilých mluvčích na světě?',
+                'Jaké písmo se používá v ruštině?'
             ]
         }
-        points = ['100', '200', '300', '400', '500']
+        points = ['BONUS', '100', '200', '300', '400', '500']
 
         for category, questions in data.items():
             ctg = Category.objects.create(name=category)
 
             for i in range(len(points)):
                 Question.objects.create(points=points[i], text=questions[i], category=ctg)
-                Question.objects.create(points=points[i], text=questions[i+5], category=ctg)
+                Question.objects.create(points=points[i], text=questions[i+6], category=ctg)

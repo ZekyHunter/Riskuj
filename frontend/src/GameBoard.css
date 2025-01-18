@@ -78,7 +78,10 @@
   width: 10rem;
   box-shadow: inset 8px 8px 17px rgba(255, 255, 255, 0.7),
     inset -1px -1px 6px rgba(255, 200, 20, 0.7);
-  cursor: pointer;
+}
+
+.category:hover {
+  background-color: #ffe673; /* Hover efekt */
 }
 
 .question-cell:hover {
@@ -89,7 +92,8 @@ body {
   font-family: "Anta", sans-serif;
 }
 
-.category-cell,
+.category,
 .question-cell {
+  cursor: pointer;
   font-family: "Anta", sans-serif;
 }

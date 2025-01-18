@@ -36,9 +36,52 @@
 }
 
 .active {
-  background-color: gold;
+  background: linear-gradient(
+    to bottom,
+    #e62117 50%,
+    #e62117 50%
+  ); /* Darker red gradient for active player */
+  box-shadow: inset 8px 8px 12px rgba(0, 0, 0, 0.6),
+    inset -1px -1px 1px rgba(255, 255, 255, 0.4);
+  /* Glow effect */
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.7),
+    /* Orange glow */ 0 0 30px rgba(230, 33, 23, 0.6); /* Slightly larger outer glow */
+  transition: box-shadow 0.3s ease-in-out; /* Smooth animation for the glow */
 }
 
-p {
- color: grey;
+.current {
+  border: 0.3rem solid #ffd200;
+  background: linear-gradient(
+    to bottom,
+    #58c7f5 50%,
+    #e62117 50%
+  ); /* Blue on top, red on bottom */
+  box-shadow: inset 8px 8px 12px rgba(0, 0, 0, 0.6),
+    inset -1px -1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.username {
+  font-size: x-large;
+  color: black;
+  text-transform: uppercase;
+  margin: 1rem;
+  z-index: 2;
+}
+
+.points {
+  font-size: x-large;
+  color: white;
+  margin: 1rem;
+  z-index: 2;
+}
+
+.player::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 0.5rem;
+  pointer-events: none;
 }

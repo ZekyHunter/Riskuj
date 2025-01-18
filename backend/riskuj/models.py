@@ -14,6 +14,7 @@ class Category(models.Model):
 
 class Question(models.Model):
     POINTS = [
+        ("BONUS", "Bonusová otázka"),
         ("100", "One hundred"),
         ("200", "Two hundred"),
         ("300", "Three hundred"),
@@ -31,8 +32,8 @@ class Question(models.Model):
 
 class Player(models.Model):
     name = models.CharField(max_length=256)
-    unique_username = models.CharField(max_length=256, unique=True, default=uuid.uuid4())
-    points = models.IntegerField(null=True, blank=True)
+    unique_username = models.CharField(max_length=256, unique=True, default=uuid.uuid4(), null=True, blank=True)
+    points = models.IntegerField(null=True, blank=True, default=0)
     answered = models.BooleanField(default=False)
 
     def __str__(self):
@@ -41,12 +42,14 @@ class Player(models.Model):
     def save(self, *args, **kwargs):
         if not self.points:
             self.points = 0
+        if not self.unique_username:
+            self.unique_username = uuid.uuid4()
         super().save(*args, **kwargs)
 
 
 class ActivePlayer(models.Model):
-    user = models.ForeignKey(to=Player, on_delete=models.CASCADE, null=True, blank=True)
+    player = models.ForeignKey(to=Player, on_delete=models.CASCADE, null=True, blank=True)
     timestamp = models.IntegerField()
 
     def __str__(self):
-        return self.user.name
+        return self.player.name
