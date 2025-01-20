@@ -50,14 +50,7 @@
 }
 
 .current {
-  border: 0.3rem solid #ffd200;
-  background: linear-gradient(
-    to bottom,
-    #58c7f5 50%,
-    #e62117 50%
-  ); /* Blue on top, red on bottom */
-  box-shadow: inset 8px 8px 12px rgba(0, 0, 0, 0.6),
-    inset -1px -1px 1px rgba(255, 255, 255, 0.5);
+  /* TODO: player that is selecting new question */
 }
 
 .username {
