@@ -49,7 +49,7 @@ class Player(models.Model):
 
 class ActivePlayer(models.Model):
     player = models.ForeignKey(to=Player, on_delete=models.CASCADE, null=True, blank=True)
-    timestamp = models.IntegerField()
+    timestamp = models.BigIntegerField()
 
     def __str__(self):
         return self.player.name
