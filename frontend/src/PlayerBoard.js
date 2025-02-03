@@ -12,7 +12,6 @@ export default function UserBoard ({ player, activePlayer, currentTurn }) {
 
     // Update player div className when activePlayer changes
     useEffect(() => {
-      console.log(activePlayer);
       if (activePlayer && player && (player.id == activePlayer.player)) {
         setActivePlayerClass("active");
         setPoints(activePlayer.points);

@@ -18,7 +18,7 @@ def index(request):
 
 class PlayerView(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
-    queryset = Player.objects.all()
+    queryset = Player.objects.all().order_by('name')
 
 
 class ActivePlayerView(viewsets.ModelViewSet):

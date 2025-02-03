@@ -5,6 +5,7 @@ import Question from "./Question";
 import PlayerBoard from "./PlayerBoard";
 import { INTERVAL_DURATION } from "./config";
 
+
 export default function MainPage() {
 
   const [players, setPlayers] = useState([]);
@@ -120,6 +121,7 @@ export default function MainPage() {
           setActivePlayer={setActivePlayer}
           openQuestion={openQuestion}
           answeredQuestions={answeredQuestions}
+          setAnsweredQuestions={setAnsweredQuestions}
           openedBricks={openedBricks}
           setOpenedBricks={setOpenedBricks}
           players={players}
