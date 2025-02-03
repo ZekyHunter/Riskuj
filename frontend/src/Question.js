@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+
 import axios from "axios";
 import "./Question.css";
+import wrong from './sounds/error.mp3';
 
 
 export default function Question({ questionOpened, question, openQuestion, closeQuestion, markQuestionAsAnswered, activePlayer,
@@ -46,6 +48,8 @@ export default function Question({ questionOpened, question, openQuestion, close
   useEffect(() => {
     if (timeLeft <= 0 && isRunning) {
       // TODO: Add sound effect
+      const audio = new Audio(wrong);
+      audio.play();
       // what happens when time runs out?
       stopTimer();
       close();
@@ -67,7 +71,6 @@ export default function Question({ questionOpened, question, openQuestion, close
   if (!questionOpened) return null;
 
   function answer (response) {
-    stopTimer();
     let answered = false;
     let playerPoints = activePlayer.points;
 
@@ -78,6 +81,8 @@ export default function Question({ questionOpened, question, openQuestion, close
       playerPoints += selectedQuestionPoints;
     } else if (response === "wrong") {
       // if the user answers wrongly, other players may still answer
+      const audio = new Audio(wrong);
+      audio.play();
       startTimer();
       // TODO: what happens to the timer when player answers wrong? Does it continue? Reset for the next player?
       playerPoints -= selectedQuestionPoints;
