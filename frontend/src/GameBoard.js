@@ -4,17 +4,30 @@ import axios from "axios";
 
 
 export default function GameBoard({ categories, questions, activePlayer, setActivePlayer, openQuestion,
-answeredQuestions, openedBricks, setOpenedBricks, players, currentTurn }) {
+answeredQuestions, setAnsweredQuestions, openedBricks, setOpenedBricks, players, currentTurn }) {
+
+
+  function bonusQuestionIsActive(categoryIndex) {
+    const questionsInCategory = questions[categoryIndex] || [];
+    const unansweredCount = questionsInCategory.filter(q => !answeredQuestions.includes(q)).length;
+    return unansweredCount > 1;
+  }
 
   function revealGold(question, questionIndex){
     setOpenedBricks((prevOpenedBricks) => [...prevOpenedBricks, question]);
+    setAnsweredQuestions([...answeredQuestions, question]);
+
+    setTimeout(() => {
+      setOpenedBricks((prevOpenedBricks) => prevOpenedBricks.filter(q => q !== question));
+    }, 5000);
+
     axios
       .patch(`/api/players/${currentTurn.id}/`, {points: currentTurn.points + (questionIndex * 100)})
       .catch((err) => console.log(err));
   }
 
   // Render the cell for each question
-  const renderQuestionCell = (q, questionIndex, category) => {
+  const renderQuestionCell = (q, questionIndex, category, mapIndex) => {
     if (!q) return null;
 
     // Handle rendering for gold bricks
@@ -22,11 +35,15 @@ answeredQuestions, openedBricks, setOpenedBricks, players, currentTurn }) {
       if (openedBricks.includes(q)) {
         return <div className="gold-cell" key={questionIndex}>Zlatá cihla!</div>;
       }
+      else if (answeredQuestions.includes(q)) {
+        return <div className="question-cell-empty" key={questionIndex}></div>;
+      }
       else if (questionIndex === 0) {
         return (
-          <div className="category" key={questionIndex} onClick={() => revealGold(q, questionIndex)}>
+          <button className="category" key={questionIndex} disabled={bonusQuestionIsActive(mapIndex)}
+          onClick={() => revealGold(q, questionIndex)}>
             { category }
-          </div>
+          </button>
         );
       }
       else {
@@ -44,9 +61,10 @@ answeredQuestions, openedBricks, setOpenedBricks, players, currentTurn }) {
     // Handle rendering bonus questions
     else if (questionIndex === 0) {
       return (
-        <div className="category" key={questionIndex} onClick={() => openQuestion(q, questionIndex)}>
+        <button className="category" key={questionIndex} disabled={bonusQuestionIsActive(mapIndex)}
+        onClick={() => openQuestion(q, questionIndex)}>
           { category }
-        </div>
+        </button>
       );
     }
     // Otherwise, render a regular question cell
@@ -65,7 +83,7 @@ answeredQuestions, openedBricks, setOpenedBricks, players, currentTurn }) {
         <div key={mapIndex}>
           <div className="oneCategoryRow">
             {questions[mapIndex]?.map((question, questionIndex) =>
-              renderQuestionCell(question, questionIndex, category)
+              renderQuestionCell(question, questionIndex, category, mapIndex)
             )}
           </div>
         </div>

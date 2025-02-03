@@ -14,7 +14,7 @@
   font-family: roboto condensed, sans-serif;
 }
 
-button {
+.button {
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #c64100;
@@ -27,11 +27,11 @@ button {
   font-family: anta, sans-serif;
 }
 
-button:hover {
+.button:hover {
   background-color: #f28e3b;
 }
 
-button:disabled {
+.button:disabled {
   background-color: gray;
   color: #ccc;
   cursor: not-allowed;
