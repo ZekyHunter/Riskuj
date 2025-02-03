@@ -10,9 +10,11 @@ export default function Question({ questionOpened, question, openQuestion, close
   const [timeLeft, setTimeLeft] = useState(30);
   const [isRunning, setIsRunning] = useState(false);
   const [timerId, setTimerId] = useState(null);
+  const [displayTimer, setDisplayTimer] = useState(false);
 
   const startTimer = () => {
     if (!isRunning) {
+      setDisplayTimer(true);
       setIsRunning(true);
       const id = setInterval(() => {
         setTimeLeft((prev) => prev - 1);
@@ -22,6 +24,7 @@ export default function Question({ questionOpened, question, openQuestion, close
   };
 
   const stopTimer = () => {
+    setDisplayTimer(false);
     setIsRunning(false);
     clearInterval(timerId);
     setTimerId(null);
@@ -34,6 +37,10 @@ export default function Question({ questionOpened, question, openQuestion, close
     closeQuestion();
     axios.get("/api/clear/").catch((err) => console.log(err));
   }
+
+  useEffect(() => {
+    activePlayer ? stopTimer() : startTimer();
+  }, [activePlayer]);
 
   // when timer runs out
   useEffect(() => {
@@ -71,6 +78,7 @@ export default function Question({ questionOpened, question, openQuestion, close
       playerPoints += selectedQuestionPoints;
     } else if (response === "wrong") {
       // if the user answers wrongly, other players may still answer
+      startTimer();
       // TODO: what happens to the timer when player answers wrong? Does it continue? Reset for the next player?
       playerPoints -= selectedQuestionPoints;
       answered = true;
@@ -99,25 +107,29 @@ export default function Question({ questionOpened, question, openQuestion, close
         <button className="button" onClick={() => answer("wrong")} disabled={buttonDisabled}>Špatná odpověď</button>
         <button className="button" onClick={() => close()}>Zavřít</button>
 
-        <div id="progressBar">
-          <div
-            style={{
-              width: "100%",
-              height: "20px",
-              backgroundColor: "#e0e0e0",
-              overflow: "hidden",
-              marginBottom: "20px",
-            }}
-          >
-        <div
-          style={{
-            width: `${(timeLeft / 30) * 100}%`,
-            height: "100%",
-            backgroundColor: "#c64100",
-            transition: "width 1s linear",
-          }}
-        ></div></div>
-        </div>
+        { displayTimer && (
+          <div id="progressBar">
+            <div
+              style={{
+                width: "100%",
+                height: "20px",
+                backgroundColor: "#e0e0e0",
+                overflow: "hidden",
+                marginBottom: "20px",
+              }}
+            >
+              <div
+                style={{
+                width: `${(timeLeft / 30) * 100}%`,
+                height: "100%",
+                backgroundColor: "#c64100",
+                transition: "width 1s linear",
+                }}
+              ></div>
+            </div>
+          </div>
+        ) }
+
       </div>
     </div>
   );
