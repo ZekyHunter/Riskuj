@@ -95,9 +95,9 @@ export default function Question({ questionOpened, question, openQuestion, close
     <div>
       <div className="question">
         <h2 style={{color:"black"}}>{question}</h2>
-        <button onClick={() => answer("correct")} disabled={buttonDisabled}>Správná odpověď</button>
-        <button onClick={() => answer("wrong")} disabled={buttonDisabled}>Špatná odpověď</button>
-        <button onClick={() => close()}>Zavřít</button>
+        <button className="button" onClick={() => answer("correct")} disabled={buttonDisabled}>Správná odpověď</button>
+        <button className="button" onClick={() => answer("wrong")} disabled={buttonDisabled}>Špatná odpověď</button>
+        <button className="button" onClick={() => close()}>Zavřít</button>
 
         <div id="progressBar">
           <div
