@@ -1,1 +1,1 @@
-export const INTERVAL_DURATION = 5000;
+export const INTERVAL_DURATION = 500;
