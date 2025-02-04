@@ -4,6 +4,7 @@ import GameBoard from "./GameBoard";
 import Question from "./Question";
 import PlayerBoard from "./PlayerBoard";
 import { INTERVAL_DURATION } from "./config";
+import "./MainPage.css";
 
 
 export default function MainPage() {
@@ -93,9 +94,10 @@ export default function MainPage() {
   }
 
   return (
-    <div>
-      <div id="users" className="player-container">
-        <p>Hráč na tahu: {currentTurn ? (currentTurn.name) : (null)}</p>
+    <div className="mainContainer">
+      <p>Hráč na tahu: {currentTurn ? (currentTurn.name) : (null)}</p>
+      <div className="playerContainer">
+
         {players.map(player => (
           <PlayerBoard
             key={player.id}
@@ -128,7 +130,7 @@ export default function MainPage() {
           currentTurn={currentTurn}
         />
       ) : (
-        <Question
+        <Question className="questionContainer"
           questionOpened={questionOpened}
           question={selectedQuestion}
           openQuestion={openQuestion}
