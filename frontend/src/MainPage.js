@@ -95,9 +95,7 @@ export default function MainPage() {
 
   return (
     <div className="mainContainer">
-      <p>Hráč na tahu: {currentTurn ? (currentTurn.name) : (null)}</p>
       <div className="playerContainer">
-
         {players.map(player => (
           <PlayerBoard
             key={player.id}
