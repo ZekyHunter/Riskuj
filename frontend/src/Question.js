@@ -100,37 +100,23 @@ export default function Question({ questionOpened, question, openQuestion, close
   }
 
   return (
-    <div>
-      <div className="question">
-        <h2 style={{color:"black"}}>{question}</h2>
+    <div className="question">
+      <h2 id="questionText">{question}</h2>
+
+      { displayTimer && (
+        <div id="progressBar">
+          <div id="progressBarBackground">
+            <div id="progressBarFill" style={{ width: `${(timeLeft / 30) * 100}%` }}></div>
+          </div>
+        </div>
+      ) }
+
+      <div>
         <button className="button" onClick={() => answer("correct")} disabled={buttonDisabled}>Správná odpověď</button>
         <button className="button" onClick={() => answer("wrong")} disabled={buttonDisabled}>Špatná odpověď</button>
-        <button className="button" onClick={() => close()}>Zavřít</button>
-
-        { displayTimer && (
-          <div id="progressBar">
-            <div
-              style={{
-                width: "100%",
-                height: "20px",
-                backgroundColor: "#e0e0e0",
-                overflow: "hidden",
-                marginBottom: "20px",
-              }}
-            >
-              <div
-                style={{
-                width: `${(timeLeft / 30) * 100}%`,
-                height: "100%",
-                backgroundColor: "#c64100",
-                transition: "width 1s linear",
-                }}
-              ></div>
-            </div>
-          </div>
-        ) }
-
       </div>
+
+      <button className="button" onClick={() => close()}>Zavřít</button>
     </div>
   );
 };

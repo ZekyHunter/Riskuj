@@ -52,6 +52,7 @@ export default function PlayerGameBoard({ player, setPlayer }) {
       <h1>{player.name}</h1>
       <button
         id="main-button"
+        className="button"
         onClick={() => answer()}
         disabled={buttonDisabled}
       >PUSH</button>
