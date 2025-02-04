@@ -7,14 +7,13 @@ export default function PlayerGameBoard({ player, setPlayer }) {
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   function answer() {
-
     // Disable the button immediately when it's pressed
     setButtonDisabled(true);
 
     // POST request to create ActivePlayer entry with timestamp
-    axios.post('/api/button-press/', { player: player.id, timestamp: Date.now() })
+    axios
+      .post('/api/button-press/', { player: player.id, timestamp: Date.now() })
       .catch((err) => console.log(err));
-
   }
 
   useEffect(() => {
@@ -24,6 +23,9 @@ export default function PlayerGameBoard({ player, setPlayer }) {
       axios
         .get("/api/active-players/")
         .then((res) => {
+          // If there is no ActivePlayer, check if the player already answered (wrongly)
+          // If they did not answer, enable the button
+          // Otherwise disable the button
           if (res.data.length === 0) {
             axios
               .get(`/api/players/${player.id}/`)
@@ -47,7 +49,7 @@ export default function PlayerGameBoard({ player, setPlayer }) {
 
   return (
     <div>
-      <h1>Player: {player.name}</h1>
+      <h1>{player.name}</h1>
       <button
         id="main-button"
         onClick={() => answer()}

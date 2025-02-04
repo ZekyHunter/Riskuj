@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./PlayerBoard.css";
 
 
-export default function UserBoard ({ player, activePlayer, currentTurn }) {
+export default function PlayerBoard ({ player, activePlayer, currentTurn }) {
 
     const [activePlayerClass, setActivePlayerClass] = useState("normal");
     const [currentTurnClass, setCurrentTurnClass] = useState("");

@@ -79,7 +79,6 @@ export default function Question({ questionOpened, question, openQuestion, close
     } else if (response === "wrong") {
       // if the user answers wrongly, other players may still answer
       startTimer();
-      // TODO: what happens to the timer when player answers wrong? Does it continue? Reset for the next player?
       playerPoints -= selectedQuestionPoints;
       answered = true;
     }
@@ -89,6 +88,7 @@ export default function Question({ questionOpened, question, openQuestion, close
       points: playerPoints,
     }));
 
+    // Set CurrentPlayer to be the player who answered the question (no matter if correctly or not)
     const player = players.find((item) => item.id === activePlayer.player);
     setCurrentTurn(player)
 
