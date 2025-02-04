@@ -76,11 +76,16 @@ export default function Question({ questionOpened, question, openQuestion, close
       markQuestionAsAnswered(question);
       closeQuestion();
       playerPoints += selectedQuestionPoints;
-    } else if (response === "wrong") {
+      axios.get("/api/clear/").catch((err) => console.log(err));
+    }
+    else if (response === "wrong") {
       // if the user answers wrongly, other players may still answer
       startTimer();
       playerPoints -= selectedQuestionPoints;
       answered = true;
+      axios
+        .delete(`/api/active-players/${activePlayer.id}/`)
+        .catch((err) => console.log(err));
     }
 
     setActivePlayer(prevState => ({
@@ -95,8 +100,6 @@ export default function Question({ questionOpened, question, openQuestion, close
     axios
       .patch(`/api/players/${activePlayer.player}/`, {points: playerPoints, answered: answered})
       .catch((err) => console.log(err));
-
-    axios.get("/api/clear/").catch((err) => console.log(err));
   }
 
   return (
