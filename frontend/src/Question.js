@@ -76,12 +76,16 @@ export default function Question({ questionOpened, question, openQuestion, close
       markQuestionAsAnswered(question);
       closeQuestion();
       playerPoints += selectedQuestionPoints;
-    } else if (response === "wrong") {
+      axios.get("/api/clear/").catch((err) => console.log(err));
+    }
+    else if (response === "wrong") {
       // if the user answers wrongly, other players may still answer
       startTimer();
-      // TODO: what happens to the timer when player answers wrong? Does it continue? Reset for the next player?
       playerPoints -= selectedQuestionPoints;
       answered = true;
+      axios
+        .delete(`/api/active-players/${activePlayer.id}/`)
+        .catch((err) => console.log(err));
     }
 
     setActivePlayer(prevState => ({
@@ -89,48 +93,33 @@ export default function Question({ questionOpened, question, openQuestion, close
       points: playerPoints,
     }));
 
+    // Set CurrentPlayer to be the player who answered the question (no matter if correctly or not)
     const player = players.find((item) => item.id === activePlayer.player);
     setCurrentTurn(player)
 
     axios
       .patch(`/api/players/${activePlayer.player}/`, {points: playerPoints, answered: answered})
       .catch((err) => console.log(err));
-
-    axios.get("/api/clear/").catch((err) => console.log(err));
   }
 
   return (
-    <div>
-      <div className="question">
-        <h2 style={{color:"black"}}>{question}</h2>
+    <div className="question">
+      <h2 id="questionText">{question}</h2>
+
+      { displayTimer && (
+        <div id="progressBar">
+          <div id="progressBarBackground">
+            <div id="progressBarFill" style={{ width: `${(timeLeft / 30) * 100}%` }}></div>
+          </div>
+        </div>
+      ) }
+
+      <div>
         <button className="button" onClick={() => answer("correct")} disabled={buttonDisabled}>Správná odpověď</button>
         <button className="button" onClick={() => answer("wrong")} disabled={buttonDisabled}>Špatná odpověď</button>
-        <button className="button" onClick={() => close()}>Zavřít</button>
-
-        { displayTimer && (
-          <div id="progressBar">
-            <div
-              style={{
-                width: "100%",
-                height: "20px",
-                backgroundColor: "#e0e0e0",
-                overflow: "hidden",
-                marginBottom: "20px",
-              }}
-            >
-              <div
-                style={{
-                width: `${(timeLeft / 30) * 100}%`,
-                height: "100%",
-                backgroundColor: "#c64100",
-                transition: "width 1s linear",
-                }}
-              ></div>
-            </div>
-          </div>
-        ) }
-
       </div>
+
+      <button className="button" onClick={() => close()}>Zavřít</button>
     </div>
   );
 };

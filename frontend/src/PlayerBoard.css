@@ -1,12 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Anta&family=Archivo+Black&family=Karla:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Merriweather&family=Orbit&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Sintony:wght@400;700&family=Work+Sans&display=swap");
 
-.player-container {
+.playerContainer {
   display: flex; /* Aligns players in a row */
   justify-content: center; /* Centers players horizontally */
   align-items: center; /* Aligns players vertically */
   flex-wrap: nowrap; /* Prevents wrapping to a new line */
-  gap: 1rem; /* Adds spacing between players */
-  margin: 2.5rem 0; /* Optional: adds some margin around */
+  gap: 1rem;
+  margin: 2.5rem 0;
 }
 
 .player {
@@ -50,7 +50,7 @@
 }
 
 .current {
-  /* TODO: player that is selecting new question */
+  border: 0.3rem solid deepskyblue;
 }
 
 .username {
