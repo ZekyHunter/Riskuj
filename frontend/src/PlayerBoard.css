@@ -50,7 +50,7 @@
 }
 
 .current {
-  /* TODO: player that is selecting new question */
+  border: 0.3rem solid deepskyblue;
 }
 
 .username {
