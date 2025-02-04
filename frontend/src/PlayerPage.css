@@ -65,6 +65,11 @@
   text-align: center;
 }
 
+#main-button {
+  padding: 2rem 6rem;
+  margin: 0;
+}
+
 #main-button:disabled {
   background-color: gray;
   color: #ccc;
