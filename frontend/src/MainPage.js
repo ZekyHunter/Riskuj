@@ -5,6 +5,7 @@ import Question from "./Question";
 import PlayerBoard from "./PlayerBoard";
 import { INTERVAL_DURATION } from "./config";
 import "./MainPage.css";
+import open from './sounds/start.mp3';
 
 
 export default function MainPage() {
@@ -64,6 +65,8 @@ export default function MainPage() {
   }
 
   function openQuestion(question, questionIndex) {
+    const audio = new Audio(open);
+    audio.play();
     setQuestionOpened(true);
     setSelectedQuestion(question);
     setSelectedQuestionPoints(questionIndex * 100);

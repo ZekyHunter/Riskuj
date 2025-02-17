@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./GameBoard.css";
 import axios from "axios";
+import gold from './sounds/gold.mp3';
 
 
 export default function GameBoard({ categories, questions, activePlayer, setActivePlayer, openQuestion,
@@ -14,6 +15,9 @@ answeredQuestions, setAnsweredQuestions, openedBricks, setOpenedBricks, players,
   }
 
   function revealGold(question, questionIndex){
+    const audio = new Audio(gold);
+    audio.play();
+
     setOpenedBricks((prevOpenedBricks) => [...prevOpenedBricks, question]);
     setAnsweredQuestions([...answeredQuestions, question]);
 

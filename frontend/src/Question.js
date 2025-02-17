@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Question.css";
 import wrong from './sounds/error.mp3';
+import applause from './sounds/applause.mp3';
 
 
 export default function Question({ questionOpened, question, openQuestion, closeQuestion, markQuestionAsAnswered, activePlayer,
@@ -47,7 +48,6 @@ export default function Question({ questionOpened, question, openQuestion, close
   // when timer runs out
   useEffect(() => {
     if (timeLeft <= 0 && isRunning) {
-      // TODO: Add sound effect
       const audio = new Audio(wrong);
       audio.play();
       // what happens when time runs out?
@@ -76,6 +76,8 @@ export default function Question({ questionOpened, question, openQuestion, close
 
     if (response === "correct") {
       // TODO: what happens when this is a bonus question? (therefore no points to award)
+      const audio = new Audio(applause);
+      audio.play();
       markQuestionAsAnswered(question);
       closeQuestion();
       playerPoints += selectedQuestionPoints;
@@ -84,8 +86,9 @@ export default function Question({ questionOpened, question, openQuestion, close
     else if (response === "wrong") {
       // if the user answers wrongly, other players may still answer
       const audio = new Audio(wrong);
-      audio.play();
-      startTimer();
+      // in the original game there is no audio for wrong answer
+      // audio.play();
+      // startTimer();
       playerPoints -= selectedQuestionPoints;
       answered = true;
       axios
