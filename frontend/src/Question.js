@@ -89,6 +89,8 @@ export default function Question({ questionOpened, question, openQuestion, close
       // in the original game there is no audio for wrong answer
       // audio.play();
       // startTimer();
+      audio.play();
+      startTimer();
       playerPoints -= selectedQuestionPoints;
       answered = true;
       axios
