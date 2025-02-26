@@ -43,6 +43,7 @@ class Player(models.Model):
         if not self.points:
             self.points = 0
         if not self.unique_username:
+            # TODO: change uuid to something more sensible
             self.unique_username = uuid.uuid4()
         super().save(*args, **kwargs)
 

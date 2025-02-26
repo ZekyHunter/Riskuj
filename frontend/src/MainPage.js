@@ -64,6 +64,11 @@ export default function MainPage() {
   }
 
   function openQuestion(question, questionIndex) {
+    if (questionIndex === 0) {
+      axios
+      .post('/api/bonus-question/', { player: currentTurn.id })
+      .catch((err) => console.log(err));
+    }
     setQuestionOpened(true);
     setSelectedQuestion(question);
     setSelectedQuestionPoints(questionIndex * 100);

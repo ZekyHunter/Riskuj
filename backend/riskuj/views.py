@@ -26,6 +26,13 @@ class ActivePlayerView(viewsets.ModelViewSet):
     queryset = ActivePlayer.objects.all().order_by("timestamp")
 
 
+@api_view(['POST'])
+def bonus_question(request):
+    player_id = request.data.get('player', None)
+    Player.objects.exclude(id=player_id).update(answered=True)
+    return HttpResponse()
+
+
 @api_view(['GET'])
 def get_questions(request):
     data = {}
