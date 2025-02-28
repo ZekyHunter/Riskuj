@@ -12,6 +12,7 @@ export default function Question({ questionOpened, question, openQuestion, close
   function close () {
     markQuestionAsAnswered(question);
     closeQuestion();
+    console.log("Closing question as unanswered, calling /api/clear");
     axios.get("/api/clear/").catch((err) => console.log(err));
   }
 
@@ -30,9 +31,11 @@ export default function Question({ questionOpened, question, openQuestion, close
       markQuestionAsAnswered(question);
       closeQuestion();
       playerPoints += selectedQuestionPoints;
+      console.log("Correct answer, calling /api/clear endpoint");
       axios.get("/api/clear/").catch((err) => console.log(err));
     }
     else if (response === "wrong") {
+      console.log("Wrong answer, removing active player");
       // if the user answers wrongly, other players may still answer
       playerPoints -= selectedQuestionPoints;
       answered = true;
@@ -50,6 +53,7 @@ export default function Question({ questionOpened, question, openQuestion, close
     const player = players.find((item) => item.id === activePlayer.player);
     setCurrentTurn(player)
 
+    console.log(`calling patch on /api/players. Player: {activePlayer.player}, answered: {answered}`);
     axios
       .patch(`/api/players/${activePlayer.player}/`, {points: playerPoints, answered: answered})
       .catch((err) => console.log(err));

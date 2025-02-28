@@ -50,6 +50,7 @@ export default function PlayerGameBoard({ player, setPlayer }) {
   return (
     <div>
       <h1>{player.name}</h1>
+      <p>Unikátní přezdívka: { player.unique_username }</p>
       <button
         id="main-button"
         className="button"
