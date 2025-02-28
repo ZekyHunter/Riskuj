@@ -1,5 +1,15 @@
 from django.db import models
-import uuid
+
+import unicodedata
+import re
+
+
+def clean_string(text):
+    text = unicodedata.normalize('NFKD', text)
+    text = ''.join([c for c in text if not unicodedata.combining(c)])
+    text = re.sub(r'[\s\-/\\]', '', text)
+    text = re.sub(r'[^a-zA-Z0-9]', '', text)
+    return text
 
 
 class Category(models.Model):
@@ -32,7 +42,7 @@ class Question(models.Model):
 
 class Player(models.Model):
     name = models.CharField(max_length=256)
-    unique_username = models.CharField(max_length=256, unique=True, default=uuid.uuid4(), null=True, blank=True)
+    unique_username = models.CharField(max_length=256, unique=True, null=True, blank=True)
     points = models.IntegerField(null=True, blank=True, default=0)
     answered = models.BooleanField(default=True)
 
@@ -43,8 +53,7 @@ class Player(models.Model):
         if not self.points:
             self.points = 0
         if not self.unique_username:
-            # TODO: change uuid to something more sensible
-            self.unique_username = uuid.uuid4()
+            self.unique_username = clean_string(self.name)
         super().save(*args, **kwargs)
 
 
