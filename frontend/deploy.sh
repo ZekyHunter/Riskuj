@@ -1,4 +1,4 @@
-git restore frontend &&
+git restore /home/admin/riskuj/riskuj/frontend &&
 git pull origin prod &&
 rm -rf /home/admin/riskuj/riskuj/frontend/build &&
 rm -rf /home/admin/riskuj/riskuj/static/build &&

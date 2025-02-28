@@ -53,7 +53,7 @@ export default function Question({ questionOpened, question, openQuestion, close
     const player = players.find((item) => item.id === activePlayer.player);
     setCurrentTurn(player)
 
-    console.log(`calling patch on /api/players. Player: {activePlayer.player}, answered: {answered}`);
+    console.log(`calling patch on /api/players. Player: ${activePlayer.player}, answered: ${answered}`);
     axios
       .patch(`/api/players/${activePlayer.player}/`, {points: playerPoints, answered: answered})
       .catch((err) => console.log(err));
