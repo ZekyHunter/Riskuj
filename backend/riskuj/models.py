@@ -34,7 +34,7 @@ class Player(models.Model):
     name = models.CharField(max_length=256)
     unique_username = models.CharField(max_length=256, unique=True, default=uuid.uuid4(), null=True, blank=True)
     points = models.IntegerField(null=True, blank=True, default=0)
-    answered = models.BooleanField(default=False)
+    answered = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

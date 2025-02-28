@@ -20,6 +20,7 @@ export default function MainPage() {
   const [activePlayer, setActivePlayer] = useState(null);  // ActivePlayer object
   const [currentTurn, setCurrentTurn] = useState(null);  // Player object
   const [errorMessage, setErrorMessage] = useState(null);
+  const [showGameBoard, setShowGameBoard] = useState(false);
 
   function getQuestions () {
     axios
@@ -42,8 +43,6 @@ export default function MainPage() {
     };
 
     const intervalId = setInterval(fetchPlayers, INTERVAL_DURATION);
-
-    getQuestions();
 
     axios
       .get("/api/players/")
@@ -68,6 +67,10 @@ export default function MainPage() {
       axios
       .post('/api/bonus-question/', { player: currentTurn.id })
       .catch((err) => console.log(err));
+    } else {
+      axios
+      .post('/api/players-answered/', { answered: false })
+      .catch((err) => console.log(err));
     }
     setQuestionOpened(true);
     setSelectedQuestion(question);
@@ -75,6 +78,9 @@ export default function MainPage() {
   }
 
   function closeQuestion() {
+    axios
+      .post('/api/players-answered/', { answered: true })
+      .catch((err) => console.log(err));
     setQuestionOpened(false);
     setSelectedQuestion(null);
     setSelectedQuestionPoints(null);
@@ -95,26 +101,25 @@ export default function MainPage() {
       const randomQuestionIndex = Math.floor(Math.random() * questionsList[randomCategoryIndex].length);
       randomQuestionsList[randomCategoryIndex][randomQuestionIndex] = `GOLD ${i + 1}`;
     }
+
     setQuestions(randomQuestionsList);
+    setShowGameBoard(true);
   }
 
   return (
     <div className="mainContainer">
-      <div className="playerContainer">
-        {players.map(player => (
-          <PlayerBoard
-            key={player.id}
-            player={player}
-            activePlayer={activePlayer}
-            currentTurn={currentTurn}
-          />
-        ))}
-      </div>
+
 
       { errorMessage &&  (
-        <div id="errorMessage" >
+        <div className="message" >
           <h1>{ errorMessage }</h1>
-          <button onClick={() => getQuestions()} >Zkusit znovu</button>
+          <button className="button" onClick={() => getQuestions()} >Zkusit znovu</button>
+        </div>
+      )}
+
+      { !showGameBoard &&  (
+        <div className="message" >
+          <button className="button" onClick={() => getQuestions()} >Načíst hrací plochu</button>
         </div>
       )}
 
@@ -147,6 +152,17 @@ export default function MainPage() {
           players={players}
         />
       )}
+
+      <div className="playerContainer fixed-bottom">
+        {players.map(player => (
+          <PlayerBoard
+            key={player.id}
+            player={player}
+            activePlayer={activePlayer}
+            currentTurn={currentTurn}
+          />
+        ))}
+      </div>
 
     </div>
   );

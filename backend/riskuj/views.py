@@ -33,6 +33,13 @@ def bonus_question(request):
     return HttpResponse()
 
 
+@api_view(['POST'])
+def players_answered(request):
+    answered = request.data.get('answered')
+    Player.objects.all().update(answered=answered)
+    return HttpResponse()
+
+
 @api_view(['GET'])
 def get_questions(request):
     data = {}
@@ -72,7 +79,6 @@ def button_press(request):
 
 @api_view(['GET'])
 def clear(request):
-    players = Player.objects.filter(answered=True)
-    players.update(answered=False)
+    Player.objects.all().update(answered=True)
     ActivePlayer.objects.all().delete()
     return HttpResponse()
