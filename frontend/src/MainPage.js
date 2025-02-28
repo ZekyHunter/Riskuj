@@ -78,9 +78,6 @@ export default function MainPage() {
   }
 
   function closeQuestion() {
-    axios
-      .post('/api/players-answered/', { answered: true })
-      .catch((err) => console.log(err));
     setQuestionOpened(false);
     setSelectedQuestion(null);
     setSelectedQuestionPoints(null);
