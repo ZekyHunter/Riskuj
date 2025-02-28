@@ -31,8 +31,13 @@ export default function PlayerGameBoard({ player, setPlayer }) {
               .get(`/api/players/${player.id}/`)
               .catch((err) => {console.log(err)})
               .then((res) => {
+                console.log(res.data);
                 if (!res.data.answered) {
+                  console.log("user did not answer yet");
                   setButtonDisabled(false);
+                } else {
+                  console.log("user already answered, presumably wrongly");
+                  setButtonDisabled(true);
                 }})
           } else {
             setButtonDisabled(true);
