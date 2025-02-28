@@ -7,29 +7,6 @@ export default function Question({ questionOpened, question, openQuestion, close
   selectedQuestionPoints, setActivePlayer, currentTurn, setCurrentTurn, players }) {
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(30);
-  const [isRunning, setIsRunning] = useState(false);
-  const [timerId, setTimerId] = useState(null);
-  const [displayTimer, setDisplayTimer] = useState(false);
-
-  const startTimer = () => {
-    if (!isRunning) {
-      setDisplayTimer(true);
-      setIsRunning(true);
-      const id = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
-      setTimerId(id);
-    }
-  };
-
-  const stopTimer = () => {
-    setDisplayTimer(false);
-    setIsRunning(false);
-    clearInterval(timerId);
-    setTimerId(null);
-    setTimeLeft(30);
-  };
 
   // when the question is closed, close the Question component, remove activePlayer and update users.answered = false
   function close () {
@@ -39,35 +16,12 @@ export default function Question({ questionOpened, question, openQuestion, close
   }
 
   useEffect(() => {
-    activePlayer ? stopTimer() : startTimer();
-  }, [activePlayer]);
-
-  // when timer runs out
-  useEffect(() => {
-    if (timeLeft <= 0 && isRunning) {
-      // TODO: Add sound effect
-      // what happens when time runs out?
-      stopTimer();
-      close();
-    }
-  }, [timeLeft, isRunning]);
-
-  useEffect(() => {
-    return () => clearInterval(timerId);
-  }, [timerId]);
-
-  useEffect(() => {
     setButtonDisabled(!!!activePlayer); // !! converts activePlayer to a boolean, ! negates the statement
   }, [activePlayer]);
-
-  useEffect(() => {
-    startTimer();
-  }, [])
 
   if (!questionOpened) return null;
 
   function answer (response) {
-    stopTimer();
     let answered = false;
     let playerPoints = activePlayer.points;
 
@@ -80,7 +34,6 @@ export default function Question({ questionOpened, question, openQuestion, close
     }
     else if (response === "wrong") {
       // if the user answers wrongly, other players may still answer
-      startTimer();
       playerPoints -= selectedQuestionPoints;
       answered = true;
       axios
@@ -105,14 +58,6 @@ export default function Question({ questionOpened, question, openQuestion, close
   return (
     <div className="question">
       <h2 id="questionText">{question}</h2>
-
-      { displayTimer && (
-        <div id="progressBar">
-          <div id="progressBarBackground">
-            <div id="progressBarFill" style={{ width: `${(timeLeft / 30) * 100}%` }}></div>
-          </div>
-        </div>
-      ) }
 
       <div>
         <button className="button" onClick={() => answer("correct")} disabled={buttonDisabled}>Správná odpověď</button>
