@@ -4,7 +4,7 @@ import { INTERVAL_DURATION } from "./config";
 
 export default function PlayerGameBoard({ player, setPlayer }) {
 
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
 
   function answer() {
     // Disable the button immediately when it's pressed

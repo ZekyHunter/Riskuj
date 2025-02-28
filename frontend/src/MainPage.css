@@ -1,4 +1,5 @@
 .mainContainer {
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,11 +9,26 @@
 .playerContainer {
   width: 100%;
   text-align: center;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
+  padding-top: 20px;
 }
 
 .questionContainer {
   display: flex;
   justify-content: center;
   width: 100%;
+}
+
+.message {
+  margin-top: 7rem;
+}
+
+.fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #212646;
+  text-align: center;
+  z-index: 1000;
 }

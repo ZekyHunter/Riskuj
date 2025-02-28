@@ -6,7 +6,6 @@
   align-items: center; /* Aligns players vertically */
   flex-wrap: nowrap; /* Prevents wrapping to a new line */
   gap: 1rem;
-  margin: 2.5rem 0;
 }
 
 .player {
@@ -57,14 +56,14 @@
   font-size: x-large;
   color: black;
   text-transform: uppercase;
-  margin: 1rem;
+  margin: 0.5rem;
   z-index: 2;
 }
 
 .points {
   font-size: x-large;
   color: white;
-  margin: 1rem;
+  margin: 0.5rem;
   z-index: 2;
 }
 

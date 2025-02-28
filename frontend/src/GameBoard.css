@@ -13,7 +13,7 @@
   text-align: center;
   border: 0.3rem solid #ffffff;
   border-radius: 0.5rem;
-  padding: 2.2rem 0.5rem;
+  padding: 1.5rem 0.5rem;
   margin: 0.5rem;
   width: 13rem;
   box-shadow: inset 8px 8px 12px rgba(0, 0, 0, 0.6),
@@ -31,7 +31,7 @@
   text-align: center;
   border: 0.3rem solid #212646;
   border-radius: 1rem;
-  padding: 2.2rem 0.5rem;
+  padding: 1.5rem 0.5rem;
   margin: 0.5rem;
   width: 10rem;
   cursor: pointer;
@@ -54,7 +54,7 @@
   text-align: center;
   border: 0.3rem solid #ffffff;
   border-radius: 0.5rem;
-  padding: 2.2rem 0.5rem;
+  padding: 1.5rem 0.5rem;
   margin: 0.5rem;
   width: 10rem;
   cursor: pointer;
@@ -73,7 +73,7 @@
   border: 0.3rem solid #fff;
   border-color: white #ffd700 #ffd700 white;
   border-radius: 0.5rem;
-  padding: 2.2rem 0.5rem;
+  padding: 1.5rem 0.5rem;
   margin: 0.5rem;
   width: 10rem;
   box-shadow: inset 8px 8px 17px rgba(255, 255, 255, 0.7),
@@ -96,4 +96,9 @@ body {
 .question-cell {
   cursor: pointer;
   font-family: "Anta", sans-serif;
+}
+
+.game-board {
+  transform: scale(0.75);
+  margin-top: -4rem;
 }
