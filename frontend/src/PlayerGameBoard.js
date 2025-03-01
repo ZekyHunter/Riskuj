@@ -14,6 +14,10 @@ export default function PlayerGameBoard({ player, setPlayer }) {
     axios
       .post('/api/button-press/', { player: player.id, timestamp: Date.now() })
       .catch((err) => console.log(err));
+
+    axios
+      .post('/api/can-answer/', { can_answer: false })
+      .catch((err) => console.log(err));
   }
 
   useEffect(() => {
@@ -31,12 +35,9 @@ export default function PlayerGameBoard({ player, setPlayer }) {
               .get(`/api/players/${player.id}/`)
               .catch((err) => {console.log(err)})
               .then((res) => {
-                console.log(res.data);
-                if (!res.data.answered) {
-                  console.log("user did not answer yet");
+                if (res.data.can_answer) {
                   setButtonDisabled(false);
                 } else {
-                  console.log("user already answered, presumably wrongly");
                   setButtonDisabled(true);
                 }})
           } else {

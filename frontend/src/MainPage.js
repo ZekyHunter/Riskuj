@@ -65,12 +65,12 @@ export default function MainPage() {
   function openQuestion(question, questionIndex) {
     if (questionIndex === 0) {
       axios
-      .post('/api/bonus-question/', { player: currentTurn.id })
-      .catch((err) => console.log(err));
+        .post('/api/can-answer/', { can_answer: true, player: currentTurn.id })
+        .catch((err) => console.log(err));
     } else {
       axios
-      .post('/api/players-answered/', { answered: false })
-      .catch((err) => console.log(err));
+        .post('/api/can-answer/', { can_answer: true })
+        .catch((err) => console.log(err));
     }
     setQuestionOpened(true);
     setSelectedQuestion(question);
@@ -81,6 +81,10 @@ export default function MainPage() {
     setQuestionOpened(false);
     setSelectedQuestion(null);
     setSelectedQuestionPoints(null);
+    axios
+      .post('/api/can-answer/', { can_answer: false })
+      .catch((err) => console.log(err));
+    axios.get("/api/clear/").catch((err) => console.log(err));
   }
 
   function initializeGameBoard(data){

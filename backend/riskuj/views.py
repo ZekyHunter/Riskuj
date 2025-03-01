@@ -1,4 +1,6 @@
-from django.db.models import Max
+from typing import Optional
+
+from django.db.models import Max, QuerySet
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
@@ -10,6 +12,23 @@ from .serializers import PlayerSerializer, ActivePlayerSerializer
 from .models import Question, Player, Category, ActivePlayer
 
 from django.shortcuts import render
+
+
+def set_can_answer(can_answer_value: bool, player_id: Optional[int] = None,
+                   exclude_queryset: Optional[QuerySet] = None) -> None:
+    if player_id:
+        player = get_object_or_404(Player, id=player_id)
+        player.can_answer = can_answer_value
+        player.save()
+
+    elif exclude_queryset:
+        a = Player.objects.exclude(id__in=exclude_queryset.values_list('id', flat=True))
+        a.update(can_answer=can_answer_value)
+
+    else:
+        Player.objects.all().update(can_answer=can_answer_value)
+
+    return
 
 
 def index(request):
@@ -24,20 +43,6 @@ class PlayerView(viewsets.ModelViewSet):
 class ActivePlayerView(viewsets.ModelViewSet):
     serializer_class = ActivePlayerSerializer
     queryset = ActivePlayer.objects.all().order_by("timestamp")
-
-
-@api_view(['POST'])
-def bonus_question(request):
-    player_id = request.data.get('player', None)
-    Player.objects.exclude(id=player_id).update(answered=True)
-    return HttpResponse()
-
-
-@api_view(['POST'])
-def players_answered(request):
-    answered = request.data.get('answered')
-    Player.objects.all().update(answered=answered)
-    return HttpResponse()
 
 
 @api_view(['GET'])
@@ -79,6 +84,38 @@ def button_press(request):
 
 @api_view(['GET'])
 def clear(request):
-    Player.objects.all().update(answered=True)
     ActivePlayer.objects.all().delete()
+    Player.objects.all().update(answered_wrong=False)
+    return HttpResponse()
+
+
+@api_view(['POST'])
+def can_answer(request):
+    can_answer_value = request.data.get('can_answer')
+    player_id = request.data.get('player', None)
+    exclude = request.data.get('exclude', None)  # typing: str or int
+    # TODO: improve the code by adding typing handling
+    exclude_queryset = None
+    if exclude:
+        exclude_queryset = Player.objects.filter(id=exclude)
+
+    set_can_answer(can_answer_value, player_id, exclude_queryset)
+    return HttpResponse()
+
+
+@api_view(['POST'])
+def answered_wrong(request):
+
+    player_id = request.data.get('player_id', None)
+    player = get_object_or_404(Player, id=player_id)
+
+    from django.db import transaction
+
+    with transaction.atomic():
+        player.answered_wrong = True
+        player.save()
+        transaction.on_commit(lambda: print("Transaction committed!"))
+        players_answered_wrong = Player.objects.all().filter(answered_wrong=True)
+        set_can_answer(True, exclude_queryset=players_answered_wrong)
+
     return HttpResponse()

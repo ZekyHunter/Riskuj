@@ -11,9 +11,7 @@ export default function Question({ questionOpened, question, openQuestion, close
   // when the question is closed, close the Question component, remove activePlayer and update users.answered = false
   function close () {
     markQuestionAsAnswered(question);
-    closeQuestion();
-    console.log("Closing question as unanswered, calling /api/clear");
-    axios.get("/api/clear/").catch((err) => console.log(err));
+    closeQuestion();  // TODO: answered
   }
 
   useEffect(() => {
@@ -23,22 +21,25 @@ export default function Question({ questionOpened, question, openQuestion, close
   if (!questionOpened) return null;
 
   function answer (response) {
-    let answered = false;
+    let answered_wrong = false;
+
     let playerPoints = activePlayer.points;
 
     if (response === "correct") {
-      // TODO: what happens when this is a bonus question? (therefore no points to award)
       markQuestionAsAnswered(question);
-      closeQuestion();
+      closeQuestion();  // TODO: answered
       playerPoints += selectedQuestionPoints;
-      console.log("Correct answer, calling /api/clear endpoint");
       axios.get("/api/clear/").catch((err) => console.log(err));
     }
     else if (response === "wrong") {
-      console.log("Wrong answer, removing active player");
+      if (selectedQuestionPoints !== 0) {
+        axios
+          .post('/api/answered-wrong/', { player_id: activePlayer.player })
+          .catch((err) => console.log(err));
+        playerPoints -= selectedQuestionPoints;
+      }
       // if the user answers wrongly, other players may still answer
-      playerPoints -= selectedQuestionPoints;
-      answered = true;
+      answered_wrong = true;
       axios
         .delete(`/api/active-players/${activePlayer.id}/`)
         .catch((err) => console.log(err));
@@ -53,9 +54,8 @@ export default function Question({ questionOpened, question, openQuestion, close
     const player = players.find((item) => item.id === activePlayer.player);
     setCurrentTurn(player)
 
-    console.log(`calling patch on /api/players. Player: ${activePlayer.player}, answered: ${answered}`);
     axios
-      .patch(`/api/players/${activePlayer.player}/`, {points: playerPoints, answered: answered})
+      .patch(`/api/players/${activePlayer.player}/`, {points: playerPoints, answered_wrong: answered_wrong })
       .catch((err) => console.log(err));
   }
 
