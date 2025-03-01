@@ -33,17 +33,13 @@ export default function Question({ questionOpened, question, openQuestion, close
     }
     else if (response === "wrong") {
       if (selectedQuestionPoints !== 0) {
-          // TODO: answered
-          axios
+        axios
           .post('/api/answered-wrong/', { player_id: activePlayer.player })
           .catch((err) => console.log(err));
-
-          playerPoints -= selectedQuestionPoints;
+        playerPoints -= selectedQuestionPoints;
       }
-
-    answered_wrong = true;
       // if the user answers wrongly, other players may still answer
-
+      answered_wrong = true;
       axios
         .delete(`/api/active-players/${activePlayer.id}/`)
         .catch((err) => console.log(err));

@@ -16,7 +16,7 @@ urlpatterns = [
     path('api/questions/', views.get_questions, name='question'),
     path('api/button-press/', views.button_press, name='button-press'),
     path('api/players/lookup/<str:unique_username>/', views.retrieve_by_username, name='retrieve-by-username'),
-    path('api/clear/', views.clear, name="clear"),  # clear active player
+    path('api/clear/', views.clear, name="clear"),
     path('api/can-answer/', views.can_answer, name='can-answer'),
     path('api/answered-wrong/', views.answered_wrong, name='answered_wrong'),
 ]

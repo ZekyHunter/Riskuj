@@ -63,16 +63,11 @@ export default function MainPage() {
   }
 
   function openQuestion(question, questionIndex) {
-    // TODO: answered
     if (questionIndex === 0) {
       axios
         .post('/api/can-answer/', { can_answer: true, player: currentTurn.id })
         .catch((err) => console.log(err));
-//      axios
-//      .post('/api/bonus-question/', { player: currentTurn.id })
-//      .catch((err) => console.log(err));
     } else {
-      // console.log("setting all players as can_answer=true");
       axios
         .post('/api/can-answer/', { can_answer: true })
         .catch((err) => console.log(err));
@@ -86,11 +81,9 @@ export default function MainPage() {
     setQuestionOpened(false);
     setSelectedQuestion(null);
     setSelectedQuestionPoints(null);
-    // TODO: answered
     axios
       .post('/api/can-answer/', { can_answer: false })
       .catch((err) => console.log(err));
-
     axios.get("/api/clear/").catch((err) => console.log(err));
   }
 
