@@ -8,11 +8,11 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('category', 'points', 'text',)
+    list_display = ('category', 'points', 'text')
 
 
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'unique_username', 'points', 'answered')
+    list_display = ('id', 'name', 'unique_username', 'points', 'can_answer', 'answered_wrong')
 
 
 class ActivePlayerAdmin(admin.ModelAdmin):

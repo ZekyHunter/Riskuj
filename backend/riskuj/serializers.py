@@ -11,7 +11,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
-        fields = ('id', 'name', 'unique_username', 'points', 'answered', )
+        fields = ('id', 'name', 'unique_username', 'points', 'can_answer', 'answered_wrong', )
 
 
 class ActivePlayerSerializer(serializers.ModelSerializer):

@@ -9,7 +9,7 @@ def clean_string(text):
     text = ''.join([c for c in text if not unicodedata.combining(c)])
     text = re.sub(r'[\s\-/\\]', '', text)
     text = re.sub(r'[^a-zA-Z0-9]', '', text)
-    return text
+    return text.lower()
 
 
 class Category(models.Model):
@@ -44,7 +44,8 @@ class Player(models.Model):
     name = models.CharField(max_length=256)
     unique_username = models.CharField(max_length=256, unique=True, null=True, blank=True)
     points = models.IntegerField(null=True, blank=True, default=0)
-    answered = models.BooleanField(default=True)
+    can_answer = models.BooleanField(default=False)
+    answered_wrong = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
