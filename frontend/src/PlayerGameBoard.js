@@ -36,7 +36,6 @@ export default function PlayerGameBoard({ player, setPlayer }) {
               .get(`/api/players/${player.id}/`)
               .catch((err) => {console.log(err)})
               .then((res) => {
-                console.log(res.data);
                 if (res.data.can_answer) {
                   setButtonDisabled(false);
                 } else {

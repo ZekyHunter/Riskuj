@@ -17,20 +17,15 @@ from django.shortcuts import render
 def set_can_answer(can_answer_value: bool, player_id: Optional[int] = None,
                    exclude_queryset: Optional[QuerySet] = None) -> None:
     if player_id:
-        print(f"Changing player {player_id} as can_answer={can_answer_value}")
         player = get_object_or_404(Player, id=player_id)
         player.can_answer = can_answer_value
         player.save()
 
     elif exclude_queryset:
-        print(f"Changing all players except players {list(exclude_queryset.values_list('name', flat=True))} "
-              f"as can_answer={can_answer_value}")
         a = Player.objects.exclude(id__in=exclude_queryset.values_list('id', flat=True))
-        print(f"changing players {a} as can_answer={can_answer_value}")
         a.update(can_answer=can_answer_value)
 
     else:
-        print(f"Changing all players as can_answer={can_answer_value}")
         Player.objects.all().update(can_answer=can_answer_value)
 
     return
@@ -43,7 +38,6 @@ def index(request):
 class PlayerView(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
     queryset = Player.objects.all().order_by('name')
-    print(queryset)
 
 
 class ActivePlayerView(viewsets.ModelViewSet):
@@ -129,21 +123,14 @@ def answered_wrong(request):
 
     player_id = request.data.get('player_id', None)
     player = get_object_or_404(Player, id=player_id)
-    print(f"saving player: {player.name} as answered_wrong=True")
 
     from django.db import transaction
 
     with transaction.atomic():
         player.answered_wrong = True
         player.save()
-
         transaction.on_commit(lambda: print("Transaction committed!"))
-
         players_answered_wrong = Player.objects.all().filter(answered_wrong=True)
-        print(f"players_answered_wrong: {players_answered_wrong}")
-
         set_can_answer(True, exclude_queryset=players_answered_wrong)
-
-        print(f"players_answered_wrong: {players_answered_wrong}")
 
     return HttpResponse()
