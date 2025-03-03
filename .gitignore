@@ -1,8 +1,11 @@
-backend/backend/__pycache__/
-backend/riskuj/__pycache__/
-backend/riskuj/management/__pycache__/
-backend/riskuj/management/commands/__pycache__/
+*__pycache__/
 static/
-backend/venv/
 frontend/node_modules/
 backend/riskuj/migrations/
+
+
+.DS_Store
+.idea/
+*.DS_Store
+*.sqlite3
+*venv/

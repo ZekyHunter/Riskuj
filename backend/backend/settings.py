@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ["127.0.0.1", "localhost", "89.203.249.88", "goraleoriginale.cz"
 # Application definition
 
 INSTALLED_APPS = [
+    'import_export',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
