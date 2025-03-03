@@ -1,5 +1,5 @@
 *__pycache__/
-sstatic/
+static/
 frontend/node_modules/
 backend/riskuj/migrations/
 
