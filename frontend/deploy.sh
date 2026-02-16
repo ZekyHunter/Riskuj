@@ -8,5 +8,7 @@ npm run build &&
 cp -r /home/admin/riskuj/riskuj/frontend/build /home/admin/riskuj/riskuj/static/build &&
 cp -r /home/admin/riskuj/riskuj/static/build/static/js /home/admin/riskuj/riskuj/static/js &&
 cp -r /home/admin/riskuj/riskuj/static/build/static/css /home/admin/riskuj/riskuj/static/css &&
+/home/admin/riskuj/riskuj/backend/venv/bin/python3 /home/admin/riskuj/riskuj/backend/manage.py makemigrations &&
+/home/admin/riskuj/riskuj/backend/venv/bin/python3 /home/admin/riskuj/riskuj/backend/manage.py migrate &&
 sudo systemctl restart gunicorn &&
 sudo systemctl restart nginx
