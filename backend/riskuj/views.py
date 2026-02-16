@@ -58,6 +58,7 @@ def get_questions(request):
             active_point_types=Count(
                 "question__points",
                 filter=Q(
+                    question__is_active=True,
                     question__points__in=required_points
                 ),
                 distinct=True

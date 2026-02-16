@@ -35,7 +35,7 @@ class Question(models.Model):
     text = models.TextField()
     points = models.CharField(max_length=245, choices=POINTS)
     category = models.ForeignKey(to=Category, on_delete=models.CASCADE, null=True, blank=True)
-    # is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.text
