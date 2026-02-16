@@ -1,6 +1,6 @@
 from typing import Optional
 
-from django.db.models import Max, QuerySet
+from django.db.models import Max, QuerySet, Count, Q
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
@@ -50,11 +50,28 @@ def get_questions(request):
     data = {}
     categories = Category.objects.order_by('?')[:6]
 
+    required_points = [choice[0] for choice in Question.POINTS]
+
+    categories = (
+        Category.objects
+            .annotate(
+            active_point_types=Count(
+                "question__points",
+                filter=Q(
+                    question__points__in=required_points
+                ),
+                distinct=True
+            )
+        )
+            .filter(active_point_types=len(required_points))
+            .order_by('?')[:6]
+    )
+
     for category in categories:
         questions = Question.objects.filter(category=category)
         category_questions = []
 
-        for pt in ['BONUS', '100', '200', '300', '400', '500']:
+        for pt in required_points:
             question = questions.filter(points=pt).first()
             category_questions.append(question.text)
 
