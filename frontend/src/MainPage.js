@@ -3,7 +3,6 @@ import axios from "axios";
 import GameBoard from "./GameBoard";
 import Question from "./Question";
 import PlayerBoard from "./PlayerBoard";
-import { INTERVAL_DURATION } from "./config";
 import "./MainPage.css";
 
 
@@ -29,21 +28,32 @@ export default function MainPage() {
       .catch((err) => setErrorMessage("Nepodařilo se načíst hrací plochu."));
   }
 
-  useEffect(() => {
-    const fetchPlayers = () => {
-      axios
-        .get("/api/players/")
-        .then(res => setPlayers(res.data))
-        .catch(err => console.log(err));
 
-      axios
-        .get("/api/active-players/")
-        .then(res => setActivePlayer(res?.data?.[0] || null))
-        .catch(err => console.error("Error fetching active players:", err));
+  useEffect(() => {
+    const playersSource = new EventSource("/sse/players/");
+
+    playersSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setPlayers(data.players);
     };
 
-    const intervalId = setInterval(fetchPlayers, INTERVAL_DURATION);
+    return () => playersSource.close();
+  }, []);
 
+  useEffect(() => {
+    const activePlayerSource = new EventSource("/sse/active-players/");
+
+    activePlayerSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setActivePlayer(data?.data?.active_players[0] || null);
+    };
+
+    return () => activePlayerSource.close();
+  }, []);
+
+  useEffect(() => {
+    // choose one of the players to have the current turn
+    // TODO: chose the player only after all players are registered and loaded
     axios
       .get("/api/players/")
       .then(res => {
@@ -53,7 +63,6 @@ export default function MainPage() {
       })
       .catch(err => console.log(err));
 
-    return () => clearInterval(intervalId);
   }, []);
 
   function markQuestionAsAnswered(question) {

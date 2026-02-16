@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { INTERVAL_DURATION } from "./config";
 
 export default function PlayerGameBoard({ player, setPlayer }) {
 
@@ -21,35 +20,26 @@ export default function PlayerGameBoard({ player, setPlayer }) {
   }
 
   useEffect(() => {
-    // Start interval on component mount
-    // Continuously check if the button should be enabled or disabled
-    const intervalId = setInterval(() => {
-      axios
-        .get("/api/active-players/")
-        .then((res) => {
-          // If there is no ActivePlayer, check if the player already answered (wrongly)
-          // If they did not answer, enable the button
-          // Otherwise disable the button
-          if (res.data.length === 0) {
-            axios
-              .get(`/api/players/${player.id}/`)
-              .catch((err) => {console.log(err)})
-              .then((res) => {
-                if (res.data.can_answer) {
-                  setButtonDisabled(false);
-                } else {
-                  setButtonDisabled(true);
-                }})
-          } else {
-            setButtonDisabled(true);
-          }
-        })
-        .catch((err) => console.log(err));
-    }, INTERVAL_DURATION);
+    const activePlayerSource = new EventSource("/sse/active-players/");
 
-    return () => {
-      clearInterval(intervalId);  // Clear any interval if the component is unmounted
+    activePlayerSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.active_players.length === 0) {
+        axios
+          .get(`/api/players/${player.id}/`)
+          .catch((err) => {console.log(err)})
+          .then((res) => {
+            if (res.data.can_answer) {
+              setButtonDisabled(false);
+            } else {
+              setButtonDisabled(true);
+            }})
+      } else {
+        setButtonDisabled(true);
+      }
     };
+
+    return () => activePlayerSource.close();
   }, []);
 
 

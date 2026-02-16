@@ -19,4 +19,6 @@ urlpatterns = [
     path('api/clear/', views.clear, name="clear"),
     path('api/can-answer/', views.can_answer, name='can-answer'),
     path('api/answered-wrong/', views.answered_wrong, name='answered_wrong'),
+    path("sse/players/", views.sse_players, name='sse-players'),  # TODO: linter
+    path("sse/active-players/", views.sse_active_players, name="sse-active-players"),
 ]
