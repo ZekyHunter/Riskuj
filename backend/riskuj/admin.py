@@ -15,8 +15,19 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 
+@admin.action(description="Set selected questions as inactive")
+def make_inactive(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
+
+@admin.action(description="Set selected questions as active")
+def make_active(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('category', 'points', 'text', 'is_active')
+    actions = [make_active, make_inactive]
 
 
 class PlayerAdmin(ExportMixin, admin.ModelAdmin):
