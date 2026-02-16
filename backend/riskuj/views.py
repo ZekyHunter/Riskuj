@@ -1,9 +1,11 @@
+import json
+import time
 from typing import Optional
 
 from django.db.models import Max, QuerySet
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -29,6 +31,38 @@ def set_can_answer(can_answer_value: bool, player_id: Optional[int] = None,
         Player.objects.all().update(can_answer=can_answer_value)
 
     return
+
+
+def player_stream():
+    """Generator function that continuously yields data."""
+    while True:
+        players = list(Player.objects.values(
+            "id", "name", "unique_username", "points", "can_answer", "answered_wrong"))
+        data = json.dumps({"players": players})
+        yield f"data: {data}\n\n"
+        time.sleep(2)  # Avoids CPU overload (adjust based on needs)
+
+
+def sse_players(request):
+    response = StreamingHttpResponse(player_stream(), content_type="text/event-stream")
+    response["Cache-Control"] = "no-cache"
+    response["Access-Control-Allow-Origin"] = "*"
+    return response
+
+
+def active_player_stream():
+    while True:
+        active_players = list(ActivePlayer.objects.values("player", "timestamp"))
+        data = json.dumps({"active_players": active_players})
+        yield f"data: {data}\n\n"
+        time.sleep(2)
+
+
+def sse_active_players(request):
+    response = StreamingHttpResponse(active_player_stream(), content_type="text/event-stream")
+    response["Cache-Control"] = "no-cache"
+    response["Access-Control-Allow-Origin"] = "*"
+    return response
 
 
 def index(request):
