@@ -16,7 +16,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('category', 'points', 'text')
+    list_display = ('category', 'points', 'text', 'is_active')
 
 
 class PlayerAdmin(ExportMixin, admin.ModelAdmin):
