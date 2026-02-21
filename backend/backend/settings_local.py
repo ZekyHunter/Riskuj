@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure-ejy_q253po8+k+gh$c(30pp=7unr*bld3_5-5bc4+@*0=u+o-j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "89.203.249.88", "goraleoriginale.cz", "www.goraleoriginale.cz"]
+ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["127.0.0.1", "localhost", "89.203.249.88", "goraleoriginale.cz", "www.goraleoriginale.cz"]
 
 
 # Application definition
@@ -59,14 +60,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'backend.urls'
 
-TEMPLATE_DIR = os.path.join(os.path.dirname(BASE_DIR), 'frontend')
+TEMPLATE_DIR = os.path.join(os.path.dirname(BASE_DIR), 'Riskuj', 'frontend')
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             TEMPLATE_DIR,
-            TEMPLATE_DIR + 'public'
+            # os.path.join(TEMPLATE_DIR, 'public'),
+            os.path.join(TEMPLATE_DIR, 'build'),
+
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -131,11 +134,12 @@ STATIC_URL = 'static/'
 # must end with a slash
 
 
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static/')
+# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static/')
+# STATIC_ROOT = os.path.join(TEMPLATE_DIR, 'build', 'static')
 # absolute path to stored static files
 # collectstatic puts the collected static files there and then looks in there to find them
 
-STATICFILES_DIRS = []
+STATICFILES_DIRS = [os.path.join(TEMPLATE_DIR, 'build', 'static'),]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -148,3 +152,23 @@ REST_FRAMEWORK = {
     )
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+MIDDLEWARE = [
+    'riskuj.middleware.PrintExceptionMiddleware',
+] + MIDDLEWARE

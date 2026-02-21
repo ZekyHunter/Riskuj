@@ -32,7 +32,8 @@ def set_can_answer(can_answer_value: bool, player_id: Optional[int] = None,
 
 
 def index(request):
-    return render(request, 'public/index.html')
+    # return HttpResponse("OK")
+    return render(request, 'index.html')
 
 
 class PlayerView(viewsets.ModelViewSet):
